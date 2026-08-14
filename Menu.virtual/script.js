@@ -119,7 +119,7 @@ function renderMenu(category = 'all') {
                 <p class="item-desc">${item.desc}</p>
                 <div class="item-footer">
                     <span class="item-price">$${item.price.toFixed(2)}</span>
-                    <button class="add-btn" onclick="addToCart(${item.id})">
+                    <button class="add-btn" data-id="${item.id}" data-action="add">
                         <i data-lucide="plus"></i>
                     </button>
                 </div>
@@ -175,7 +175,7 @@ function updateCartUI() {
                         <h4 style="font-family:var(--font-header)">${item.title} x${item.quantity}</h4>
                         <span style="color:var(--accent);font-weight:700">$${(item.price * item.quantity).toFixed(2)}</span>
                     </div>
-                    <button onclick="removeFromCart(${item.id})" style="background:none;border:none;color:var(--text-secondary);cursor:pointer">
+                    <button class="remove-btn" data-id="${item.id}" data-action="remove" style="background:none;border:none;color:var(--text-secondary);cursor:pointer">
                          <i data-lucide="trash-2" style="width:18px;"></i>
                     </button>
                 </div>
@@ -209,6 +209,17 @@ function showCart() {
 function hideCart() {
     cartSidebar.classList.remove('open');
 }
+
+// Delegación de eventos: permite clicks reales (y del driver de automatización)
+// sobre botones generados dinámicamente, sin depender de onclick inline.
+menuGrid.addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-action="add"]');
+    if (btn) addToCart(Number(btn.dataset.id));
+});
+cartItemsContainer.addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-action="remove"]');
+    if (btn) removeFromCart(Number(btn.dataset.id));
+});
 
 // Events
 cartToggle.onclick = () => { showCart(); };
