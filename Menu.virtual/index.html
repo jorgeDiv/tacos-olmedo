@@ -66,20 +66,21 @@
         </section>
     </main>
 
-    <!-- Cart Sidebar -->
+    <!-- Cart Sidebar (overlay transparente) -->
     <aside class="cart-sidebar" id="cartSidebar">
-        <div class="cart-header">
-            <h3 style="display:flex; align-items:center; gap:0.5rem;">
-                <i data-lucide="clipboard-list" style="width:20px; height:20px; color:var(--accent);"></i>
-                Tu Pedido
-            </h3>
-            <button class="close-btn" id="closeCart">
-                <i data-lucide="x"></i>
-            </button>
-        </div>
-        <div class="cart-items" id="cartItems">
-            <!-- Cart items here -->
-            <p class="empty-msg">Tu carrito está vacío</p>
+        <div class="cart-panel">
+            <div class="cart-header">
+                <h3 style="display:flex; align-items:center; gap:0.5rem;">
+                    <i data-lucide="clipboard-list" style="width:20px; height:20px; color:var(--accent);"></i>
+                    Tu Pedido
+                </h3>
+                <button class="close-btn" id="closeCart">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            <div class="cart-items" id="cartItems">
+                <!-- Cart items here -->
+                <p class="empty-msg">Tu carrito está vacío</p>
         </div>
         <div class="cart-footer">
             <div class="shipping-notice" id="shippingNotice" style="flex-direction: column; align-items: flex-start; gap: 0.5rem;">
@@ -158,6 +159,7 @@
                 <span class="total-price">$0.00</span>
             </div>
             <button class="checkout-btn" disabled>Confirmar por WhatsApp</button>
+        </div>
         </div>
     </aside>
 
