@@ -162,9 +162,7 @@ function updateCartUI() {
         if (notice) notice.style.display = 'none';
     } else {
         checkoutBtn.disabled = false;
-        // Check current delivery method
-        const delivery = document.querySelector('input[name="deliveryMethod"]:checked')?.value || 'Entrega';
-        if (notice) notice.style.display = (delivery === 'Entrega') ? 'flex' : 'none';
+        if (notice) notice.style.display = 'flex';
 
         cart.forEach(item => {
             const el = document.createElement('div');
@@ -178,7 +176,7 @@ function updateCartUI() {
                         <span style="color:var(--accent);font-weight:700">$${(item.price * item.quantity).toFixed(2)}</span>
                     </div>
                     <button onclick="removeFromCart(${item.id})" style="background:none;border:none;color:var(--text-secondary);cursor:pointer">
-                         <i data-lucide="trash-2" style="width:18px"></i>
+                         <i data-lucide="trash-2" style="width:18px;"></i>
                     </button>
                 </div>
             `;
@@ -189,9 +187,8 @@ function updateCartUI() {
     const count = cart.reduce((acc, cur) => acc + cur.quantity, 0);
     let total = cart.reduce((acc, cur) => acc + (cur.price * cur.quantity), 0);
 
-    // Sumar envío si aplica
-    const delivery = document.querySelector('input[name="deliveryMethod"]:checked')?.value || 'Entrega';
-    if (delivery === 'Entrega' && total <= 300 && total > 0) {
+    // Cargo por envío: $20 si el subtotal es <= $300, gratis si es mayor
+    if (total > 0 && total <= 300) {
         total += 20;
     }
 
@@ -231,10 +228,7 @@ catLinks.forEach(link => {
     };
 });
 
-// Update notice when delivery method changes
-document.querySelectorAll('input[name="deliveryMethod"]').forEach(input => {
-    input.onchange = () => updateCartUI();
-});
+// Update notice when payment method changes
 document.querySelectorAll('input[name="payment"]').forEach(input => {
     input.onchange = () => updateCartUI();
 });
@@ -250,12 +244,10 @@ document.getElementById('backToTop').onclick = () => window.scrollTo(0, 0);
 checkoutBtn.onclick = () => {
     const text = cart.map(i => `${i.title} (x${i.quantity})`).join('\n');
     const total = totalPriceElement.innerText;
-    const delivery = document.querySelector('input[name="deliveryMethod"]:checked').value;
     const payment = document.querySelector('input[name="payment"]:checked').value;
     const clientName = document.getElementById('clientName').value;
     const clientPhone = document.getElementById('clientPhone').value;
     const address = document.getElementById('deliveryAddress').value;
-    const notes = document.getElementById('orderNotes').value;
     const adminPhone = localStorage.getItem('adminPhone') || "521234567890";
 
     if (!clientName || !clientPhone) {
@@ -263,20 +255,15 @@ checkoutBtn.onclick = () => {
         return;
     }
 
-    let typeMsg = "";
-    if (delivery === 'Entrega') typeMsg = "🏠 *Entrega:* A domicilio";
-    else if (delivery === 'Local') typeMsg = "🏃 *Entrega:* Recoger en local";
-
     let payMsg = "";
     if (payment === 'Efectivo') payMsg = "💵 *Pago:* Efectivo";
     else if (payment === 'Transferencia') payMsg = "💳 *Pago:* Transferencia";
-    else if (payment === 'MercadoLibre') payMsg = "💳 *Pago:* Mercado Libre";
+    else if (payment === 'Mercado Pago') payMsg = "💳 *Pago:* Mercado Pago";
 
     const customerMsg = `👤 *Cliente:* ${clientName}\n📞 *Teléfono:* ${clientPhone}`;
-    const locMsg = address ? `📍 *Ubicación:* ${address}` : "📍 *Ubicación:* Sin especificar";
-    const notesMsg = notes ? `\n📝 *Notas:* ${notes}` : "";
+    const locMsg = address ? `📍 *Dirección de entrega:* ${address}` : "📍 *Dirección de entrega:* Sin especificar";
 
-    const msg = encodeURIComponent(`¡Hola Tacos Olmedo!\n\n🛍️ *Nuevo Pedido:*\n${text}\n\n💰 *Total:* ${total}\n${typeMsg}\n${payMsg}\n${customerMsg}\n${locMsg}${notesMsg}`);
+    const msg = encodeURIComponent(`¡Hola Tacos Olmedo!\n\n🛍️ *Nuevo Pedido:*\n${text}\n\n💰 *Total del carrito:* ${total}\n${payMsg}\n${customerMsg}\n${locMsg}`);
 
     // Save order for Admin/Repartidor
     const orders = JSON.parse(localStorage.getItem('tacosOrders')) || [];
@@ -286,10 +273,8 @@ checkoutBtn.onclick = () => {
         total: total,
         customerName: clientName,
         customerPhone: clientPhone,
-        deliveryType: delivery,
         paymentMethod: payment,
         address: address,
-        notes: notes,
         status: 'Pendiente',
         date: new Date().toLocaleString()
     };
@@ -306,7 +291,6 @@ checkoutBtn.onclick = () => {
     document.getElementById('clientName').value = '';
     document.getElementById('clientPhone').value = '';
     document.getElementById('deliveryAddress').value = '';
-    document.getElementById('orderNotes').value = '';
 
     updateCartUI();
 };
