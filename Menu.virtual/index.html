@@ -65,83 +65,73 @@
     </main>
 
     <!-- Cart Sidebar (overlay transparente) -->
-    <aside class="cart-sidebar" id="cartSidebar">
-        <div class="cart-panel">
+    <aside class="cart-sidebar" id="cartSidebar" aria-hidden="true">
+        <div class="cart-panel" role="dialog" aria-modal="true" aria-label="Tu Pedido">
             <div class="cart-header">
-                <h3 style="display:flex; align-items:center; gap:0.5rem;">
-                    <i data-lucide="clipboard-list" style="width:20px; height:20px; color:var(--accent);"></i>
+                <h3>
+                    <i data-lucide="shopping-cart"></i>
                     Tu Pedido
                 </h3>
-                <button class="close-btn" id="closeCart" aria-label="Cerrar">
+                <button class="close-btn" id="closeCart" aria-label="Cerrar pedido">
                     <i data-lucide="x"></i>
                 </button>
             </div>
 
-            <div class="cart-scroll">
+            <div class="cart-body">
                 <div class="cart-items" id="cartItems">
-                    <!-- Cart items here -->
                     <p class="empty-msg">Tu carrito está vacío</p>
                 </div>
 
-                <div class="cart-footer">
-                    <!-- Leyenda de envío -->
-                    <div class="shipping-notice" id="shippingNotice">
-                        <i data-lucide="truck" style="width:16px; height:16px; flex-shrink:0;"></i>
-                        <span><strong>Cargo por envío $20.00 MXN</strong>, Envío sin costo solo en compras mayores a <strong>$300.00 MXN</strong>.</span>
+                <div class="cart-form">
+                    <p class="shipping-notice">
+                        <i data-lucide="truck"></i>
+                        <span><b>Cargo por envío $20.00 MXN</b>, Envío sin costo solo en compras mayores a <b>$300.00 MXN</b>.</span>
+                    </p>
+
+                    <div class="field">
+                        <label for="clientName">Nombre</label>
+                        <input type="text" id="clientName" placeholder="Tu nombre">
                     </div>
 
-                    <!-- Datos del cliente -->
-                    <div class="form-group">
-                        <label class="form-label" for="clientName">Nombre:</label>
-                        <input type="text" id="clientName" class="form-input" placeholder="Tu nombre...">
+                    <div class="field">
+                        <label for="clientPhone">Teléfono</label>
+                        <input type="tel" id="clientPhone" placeholder="10 dígitos">
                     </div>
 
-                    <div class="form-group">
-                        <label class="form-label" for="clientPhone">Teléfono de contacto:</label>
-                        <input type="tel" id="clientPhone" class="form-input" placeholder="Tu número (10 dígitos)...">
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label" for="deliveryAddress">
-                            <i data-lucide="map-pin" style="width:13px; height:13px; vertical-align:middle;"></i>
-                            Dirección de entrega:
-                        </label>
-                        <textarea id="deliveryAddress" class="form-input" rows="2"
-                            placeholder="Calle, Número, Colonia y Referencias..."></textarea>
+                    <div class="field">
+                        <label for="deliveryAddress">Dirección de entrega</label>
+                        <textarea id="deliveryAddress" rows="2" placeholder="Calle, Número, Colonia, Referencias"></textarea>
                         <button type="button" class="locate-btn" id="confirmLocationBtn">
-                            <i data-lucide="locate-fixed" style="width:14px;"></i> Usar mi ubicación actual
+                            <i data-lucide="map-pin"></i> Usar mi ubicación
                         </button>
-                        <input type="hidden" id="clientCoords">
                     </div>
 
-                    <!-- Método de pago -->
-                    <div class="payment-methods">
-                        <p class="payment-label">Método de pago:</p>
-                        <div class="payment-options">
-                            <label class="payment-opt">
+                    <div class="field">
+                        <label>Método de pago</label>
+                        <div class="pay-grid">
+                            <label class="pay-opt">
                                 <input type="radio" name="payment" value="Efectivo" checked>
-                                <span class="pay-pill"><i data-lucide="banknote" style="width:15px;"></i> Efectivo</span>
+                                <span><i data-lucide="banknote"></i> Efectivo</span>
                             </label>
-                            <label class="payment-opt">
+                            <label class="pay-opt">
                                 <input type="radio" name="payment" value="Transferencia">
-                                <span class="pay-pill"><i data-lucide="landmark" style="width:15px;"></i> Transferencia</span>
+                                <span><i data-lucide="landmark"></i> Transferencia</span>
                             </label>
-                            <label class="payment-opt">
+                            <label class="pay-opt">
                                 <input type="radio" name="payment" value="Mercado Pago">
-                                <span class="pay-pill"><i data-lucide="credit-card" style="width:15px;"></i> Mercado Pago</span>
+                                <span><i data-lucide="credit-card"></i> Mercado Pago</span>
                             </label>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Barra fija inferior: total + confirmar -->
-            <div class="cart-actions">
+            <div class="cart-foot">
                 <div class="total-row">
-                    <span>Total del carrito:</span>
+                    <span>Total del carrito</span>
                     <span class="total-price">$0.00</span>
                 </div>
-                <button class="checkout-btn" disabled>Confirmar pedido por WhatsApp</button>
+                <button class="checkout-btn" id="checkoutBtn" disabled>Confirmar pedido por WhatsApp</button>
             </div>
         </div>
     </aside>

@@ -341,100 +341,109 @@ body {
     scale: 1.1;
 }
 
-/* Cart Sidebar — overlay transparente */
+/* ===== Ventana de pedido (modal) ===== */
 .cart-sidebar {
     position: fixed;
     inset: 0;
-    width: 100vw;
-    height: 100vh;
-    height: 100dvh;
-    background: transparent;
     z-index: 2000;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: clamp(1rem, 4vw, 3rem);
+    padding: clamp(0.75rem, 3vw, 2.5rem);
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
     opacity: 0;
     visibility: hidden;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
+    transition: opacity 0.25s ease, visibility 0.25s ease;
 }
+.cart-sidebar.open { opacity: 1; visibility: visible; }
 
-/* Fondo translúcido (overlay) que se ve detrás del panel */
-.cart-sidebar::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.68);
-    backdrop-filter: blur(7px);
-    -webkit-backdrop-filter: blur(7px);
-    z-index: -1;
-}
-
-.cart-sidebar.open {
-    opacity: 1;
-    visibility: visible;
-}
-
-/* Panel central: ventana compacta */
 .cart-panel {
     width: 100%;
-    max-width: 540px;
-    max-height: min(88vh, 760px);
+    max-width: 460px;
+    max-height: 90vh;
     display: flex;
     flex-direction: column;
-    background: var(--bg-secondary);
-    border: 1px solid var(--glass-border);
-    border-radius: var(--radius-lg);
-    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.75);
+    background: #1c1c22;
+    border: 1px solid #34343d;
+    border-radius: 16px;
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.6);
     overflow: hidden;
 }
 
 .cart-header {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    padding: 1.1rem 1.5rem;
-    border-bottom: 1px solid var(--glass-border);
+    justify-content: space-between;
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid #2c2c34;
     flex-shrink: 0;
-    background: linear-gradient(180deg, rgba(255, 77, 0, 0.06), transparent);
 }
-
 .cart-header h3 {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0;
     font-size: 1.15rem;
-    color: var(--text-primary);
+    font-weight: 700;
+    color: #f2f2f5;
 }
+.cart-header h3 i { width: 20px; height: 20px; color: #ff6d2b; }
+.close-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border: none;
+    border-radius: 50%;
+    background: #2c2c34;
+    color: #f2f2f5;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+.close-btn:hover { background: #3a3a44; }
+.close-btn i { width: 18px; height: 18px; }
 
-/* Área scrolleable: items + formulario juntos con barra visible */
-.cart-scroll {
+/* Cuerpo scrolleable: items + formulario */
+.cart-body {
     flex: 1 1 auto;
     min-height: 0;
-    display: flex;
-    flex-direction: column;
     overflow-y: auto;
-    scrollbar-width: thin;
-    scrollbar-color: var(--accent) rgba(255, 255, 255, 0.08);
-}
-
-.cart-scroll::-webkit-scrollbar { width: 10px; }
-.cart-scroll::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.05); }
-.cart-scroll::-webkit-scrollbar-thumb {
-    background: var(--accent);
-    border-radius: 10px;
-    border: 2px solid var(--bg-secondary);
-}
-.cart-scroll::-webkit-scrollbar-thumb:hover { background: #ff6a2b; }
-
-.cart-items {
-    padding: 1.25rem 1.5rem;
-    flex-shrink: 0;
-}
-
-.cart-footer {
-    padding: 0 1.5rem 1.5rem;
+    padding: 1.1rem 1.25rem;
     display: flex;
     flex-direction: column;
-    gap: 0.9rem;
+    gap: 1rem;
+    scrollbar-width: thin;
+    scrollbar-color: #ff6d2b #2c2c34;
 }
+.cart-body::-webkit-scrollbar { width: 9px; }
+.cart-body::-webkit-scrollbar-track { background: #2c2c34; border-radius: 9px; }
+.cart-body::-webkit-scrollbar-thumb {
+    background: #ff6d2b;
+    border-radius: 9px;
+    border: 2px solid #1c1c22;
+}
+
+.cart-items { display: flex; flex-direction: column; gap: 0.5rem; }
+.empty-msg {
+    text-align: center;
+    color: #9a9aa5;
+    padding: 1.5rem 0;
+    font-size: 0.9rem;
+}
+.cart-item-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.7rem 0;
+    border-bottom: 1px solid #2c2c34;
+}
+.cart-item-row h4 { margin: 0; font-size: 0.92rem; color: #f2f2f5; }
+.cart-item-row span { color: #ff6d2b; font-weight: 700; }
+.cart-item-row button { background: none; border: none; color: #9a9aa5; cursor: pointer; }
+.cart-item-row button:hover { color: #ff5555; }
 
 /* Leyenda de envío */
 .shipping-notice {
@@ -442,140 +451,126 @@ body {
     align-items: flex-start;
     gap: 0.5rem;
     padding: 0.7rem 0.85rem;
-    background: rgba(255, 77, 0, 0.08);
-    border: 1px solid rgba(255, 77, 0, 0.25);
-    border-radius: var(--radius-md);
-    font-size: 0.82rem;
+    background: rgba(255, 109, 43, 0.1);
+    border: 1px solid rgba(255, 109, 43, 0.3);
+    border-radius: 10px;
+    font-size: 0.8rem;
     line-height: 1.35;
-    color: var(--text-secondary);
+    color: #c9c9d2;
 }
-.shipping-notice strong { color: var(--accent); }
+.shipping-notice i { width: 16px; height: 16px; color: #ff6d2b; flex-shrink: 0; margin-top: 1px; }
+.shipping-notice b { color: #ff6d2b; }
 
-/* Formularios */
-.form-group {
-    display: flex;
-    flex-direction: column;
-    gap: 0.35rem;
-}
-
-.form-label {
+/* Campos del formulario */
+.field { display: flex; flex-direction: column; gap: 0.35rem; }
+.field > label {
     font-size: 0.82rem;
     font-weight: 600;
-    color: var(--text-primary);
+    color: #f2f2f5;
 }
-
-.form-input {
+.field input,
+.field textarea {
     width: 100%;
-    background: var(--glass);
-    border: 1px solid var(--glass-border);
-    border-radius: var(--radius-md);
-    color: var(--text-primary);
-    font-size: 0.92rem;
+    background: #26262e;
+    border: 1px solid #34343d;
+    border-radius: 10px;
+    color: #f2f2f5;
+    font-size: 0.9rem;
+    font-family: inherit;
     padding: 0.65rem 0.8rem;
+    resize: vertical;
     transition: border-color 0.2s ease;
 }
-.form-input::placeholder { color: var(--text-muted); }
-.form-input:focus {
+.field input::placeholder,
+.field textarea::placeholder { color: #75757f; }
+.field input:focus,
+.field textarea:focus {
     outline: none;
-    border-color: var(--accent);
-    box-shadow: 0 0 0 2px rgba(255, 77, 0, 0.2);
+    border-color: #ff6d2b;
+    box-shadow: 0 0 0 2px rgba(255, 109, 43, 0.2);
 }
-
 .locate-btn {
     align-self: flex-start;
     display: inline-flex;
     align-items: center;
     gap: 0.4rem;
-    margin-top: 0.2rem;
-    padding: 0.5rem 0.8rem;
-    font-size: 0.8rem;
-    color: var(--accent);
+    margin-top: 0.3rem;
+    padding: 0.45rem 0.75rem;
+    font-size: 0.78rem;
+    color: #ff6d2b;
     background: transparent;
-    border: 1px solid var(--accent);
-    border-radius: var(--radius-md);
+    border: 1px solid #ff6d2b;
+    border-radius: 10px;
     cursor: pointer;
     transition: background 0.2s ease;
 }
-.locate-btn:hover { background: rgba(255, 77, 0, 0.12); }
+.locate-btn:hover { background: rgba(255, 109, 43, 0.12); }
+.locate-btn i { width: 14px; height: 14px; }
 
 /* Método de pago */
-.payment-label {
-    font-size: 0.9rem;
-    font-weight: 700;
-    color: var(--text-primary);
-}
-
-.payment-options {
+.pay-grid { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.pay-opt { position: relative; cursor: pointer; flex: 1 1 auto; }
+.pay-opt input { position: absolute; opacity: 0; pointer-events: none; }
+.pay-opt span {
     display: flex;
-    flex-wrap: wrap;
-    gap: 0.6rem;
-}
-
-.payment-opt { position: relative; cursor: pointer; }
-.payment-opt input { position: absolute; opacity: 0; pointer-events: none; }
-.pay-pill {
-    display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 0.4rem;
-    padding: 0.55rem 0.9rem;
-    font-size: 0.88rem;
+    padding: 0.6rem 0.5rem;
+    font-size: 0.85rem;
     font-weight: 600;
-    color: var(--text-secondary);
-    background: var(--glass);
-    border: 1px solid var(--glass-border);
-    border-radius: 999px;
+    color: #c9c9d2;
+    background: #26262e;
+    border: 1px solid #34343d;
+    border-radius: 10px;
     transition: all 0.2s ease;
 }
-.payment-opt input:checked + .pay-pill {
+.pay-opt span i { width: 15px; height: 15px; }
+.pay-opt input:checked + span {
     color: #fff;
-    background: var(--accent);
-    border-color: var(--accent);
-    box-shadow: 0 4px 14px rgba(255, 77, 0, 0.35);
+    background: #ff6d2b;
+    border-color: #ff6d2b;
+    box-shadow: 0 4px 14px rgba(255, 109, 43, 0.35);
 }
 
-/* Barra fija inferior: total + confirmar */
-.cart-actions {
+/* Pie fijo: total + botón */
+.cart-foot {
     flex-shrink: 0;
-    padding: 1rem 1.5rem;
-    border-top: 1px solid var(--glass-border);
-    background: rgba(0, 0, 0, 0.25);
+    padding: 1rem 1.25rem;
+    border-top: 1px solid #2c2c34;
+    background: #181820;
     display: flex;
     flex-direction: column;
-    gap: 0.8rem;
+    gap: 0.75rem;
 }
-
 .total-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: 1.05rem;
-    font-weight: 700;
-    color: var(--text-primary);
+    font-size: 1rem;
+    font-weight: 600;
+    color: #f2f2f5;
 }
-.total-row .total-price { color: var(--accent); font-size: 1.25rem; }
-
+.total-row .total-price { color: #ff6d2b; font-size: 1.3rem; font-weight: 800; }
 .checkout-btn {
     width: 100%;
     padding: 0.85rem;
     font-size: 1rem;
     font-weight: 700;
     color: #fff;
-    background: var(--accent);
+    background: #ff6d2b;
     border: none;
-    border-radius: var(--radius-md);
+    border-radius: 10px;
     cursor: pointer;
     transition: transform 0.15s ease, box-shadow 0.2s ease, opacity 0.2s ease;
 }
 .checkout-btn:hover:not(:disabled) {
     transform: translateY(-1px);
-    box-shadow: 0 8px 22px rgba(255, 77, 0, 0.4);
+    box-shadow: 0 8px 22px rgba(255, 109, 43, 0.4);
 }
-.checkout-btn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
+.checkout-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
-/* Modal pedido responsive: en móvil pantalla completa */
+/* Responsive: móvil pantalla completa */
 @media (max-width: 768px) {
     .cart-sidebar { padding: 0; }
     .cart-panel {

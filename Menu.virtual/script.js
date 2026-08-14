@@ -289,11 +289,8 @@ checkoutBtn.onclick = () => {
     updateCartUI();
 };
 
-// Start
-// Map Initialization
-// Geolocalización nativa (sin mapa externo): guarda lat/lng en campo oculto
+// Geolocalización nativa (sin mapa externo)
 document.getElementById('confirmLocationBtn').onclick = () => {
-    const coordsField = document.getElementById('clientCoords');
     const addrField = document.getElementById('deliveryAddress');
     if (!navigator.geolocation) {
         alert("Geolocalización no soportada en este navegador.");
@@ -302,7 +299,6 @@ document.getElementById('confirmLocationBtn').onclick = () => {
     navigator.geolocation.getCurrentPosition((pos) => {
         const lat = pos.coords.latitude.toFixed(6);
         const lng = pos.coords.longitude.toFixed(6);
-        coordsField.value = `${lat},${lng}`;
         if (!addrField.value.trim()) {
             addrField.value = `Ubicación actual: ${lat}, ${lng}`;
         }
