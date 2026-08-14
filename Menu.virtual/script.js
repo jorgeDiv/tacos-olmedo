@@ -154,7 +154,7 @@ function addToCart(id) {
 
 function updateCartUI() {
     cartItemsContainer.innerHTML = '';
-    const notice = document.getElementById('shippingNotice');
+    const notice = document.querySelector('.shipping-notice');
 
     if (cart.length === 0) {
         cartItemsContainer.innerHTML = '<p class="empty-msg">Tu carrito está vacío</p>';
