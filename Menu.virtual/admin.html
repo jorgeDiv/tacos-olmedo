@@ -389,22 +389,25 @@
         const reportSection = document.getElementById('reportSection');
         const trackingSection = document.getElementById('trackingSection');
 
-        // Credentials
-        const CREDENTIALS = {
-            'admin': { pass: 'tacos123', role: 'Administrador' },
-            'olmedo': { pass: 'TacosOlmedo2026!', role: 'Administrador' },
-            'caja': { pass: 'tacos000', role: 'Recepcionista' },
-            'maestro': { pass: 'tacos111', role: 'Maestro Taquero' },
-            'prepara': { pass: 'tacos222', role: 'Auxiliar' },
-            'moto': { pass: 'tacos789', role: 'Repartidor' }
-        };
+        // Usuarios: se gestionan via localStorage (panel de Administracion).
+        // No hay credenciales hardcodeadas en el codigo fuente.
+        // Al primer acceso se crea un admin por defecto que el usuario debe cambiar.
+        function loadUsers() {
+            let users = JSON.parse(localStorage.getItem('adminUsers')) || [];
+            if (users.length === 0) {
+                users = [{ id: 1, name: 'admin', pass: 'admin123', role: 'Administrador' }];
+                localStorage.setItem('adminUsers', JSON.stringify(users));
+            }
+            return users;
+        }
 
         loginBtn.onclick = () => {
-            const u = document.getElementById('loginUser').value;
+            const u = document.getElementById('loginUser').value.trim();
             const p = document.getElementById('loginPass').value;
-
-            if (CREDENTIALS[u] && CREDENTIALS[u].pass === p) {
-                showAdminPanel(CREDENTIALS[u].role);
+            const users = loadUsers();
+            const found = users.find(x => x.name === u && x.pass === p);
+            if (found) {
+                showAdminPanel(found.role);
             } else {
                 loginError.style.display = 'block';
             }
