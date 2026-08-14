@@ -233,9 +233,33 @@ catLinks.forEach(link => {
     };
 });
 
+// Configuracion de Mercado Pago (editable via localStorage 'mpLink')
+const MP_LINK_DEFAULT = 'link.mercadopago.com.mx/tacosolmedo';
+function getMpLink() {
+    return localStorage.getItem('mpLink') || MP_LINK_DEFAULT;
+}
+function getMpHref() {
+    const l = getMpLink();
+    return l.startsWith('http') ? l : 'https://' + l;
+}
+
+// Mostrar/ocultar el link de Mercado Pago segun el metodo de pago
+function refreshMpLinkBox() {
+    const box = document.getElementById('mpLinkBox');
+    if (!box) return;
+    const payment = document.querySelector('input[name="payment"]:checked');
+    const isMp = payment && payment.value === 'Mercado Pago';
+    box.style.display = isMp ? 'block' : 'none';
+    if (isMp) {
+        const a = document.getElementById('mpLink');
+        a.href = getMpLink();
+        a.textContent = getMpLink();
+    }
+}
+
 // Update notice when payment method changes
 document.querySelectorAll('input[name="payment"]').forEach(input => {
-    input.onchange = () => updateCartUI();
+    input.onchange = () => { refreshMpLinkBox(); updateCartUI(); };
 });
 
 window.onscroll = () => {
@@ -263,7 +287,7 @@ checkoutBtn.onclick = () => {
     let payMsg = "";
     if (payment === 'Efectivo') payMsg = "💵 *Pago:* Efectivo";
     else if (payment === 'Transferencia') payMsg = "💳 *Pago:* Transferencia";
-    else if (payment === 'Mercado Pago') payMsg = "💳 *Pago:* Mercado Pago";
+    else if (payment === 'Mercado Pago') payMsg = `💳 *Pago:* Mercado Pago\n🔗 *Paga aquí:* ${getMpLink()}`;
 
     const customerMsg = `👤 *Cliente:* ${clientName}\n📞 *Teléfono:* ${clientPhone}`;
     const locMsg = address ? `📍 *Dirección de entrega:* ${address}` : "📍 *Dirección de entrega:* Sin especificar";

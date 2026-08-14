@@ -149,8 +149,11 @@ body {
 }
 
 .hero-content {
+    width: 100%;
     max-width: 800px;
+    margin: 0 auto;
     padding: 0 1.5rem;
+    text-align: center;
 }
 
 .hero-title {
@@ -787,7 +790,8 @@ select.form-input option {
 
 @media (max-width: 480px) {
     .hero { height: 46vh; }
-    .hero-subtitle { font-size: 0.95rem; margin-bottom: 1.5rem; }
+    .hero-title { font-size: clamp(1.9rem, 9vw, 2.8rem); line-height: 1.15; margin-bottom: 1rem; }
+    .hero-subtitle { font-size: 1rem; line-height: 1.4; margin-bottom: 1.5rem; padding: 0 0.5rem; }
     .cta-btn { padding: 0.85rem 2rem; font-size: 0.95rem; }
     .cat-link { padding: 0.5rem 1rem; font-size: 0.82rem; }
     .payment-opt { flex: 1 1 100%; }
