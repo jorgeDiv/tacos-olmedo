@@ -1,0 +1,11 @@
+# Worktrees embebidos (cada uno es su propio repo git)
+.worktrees/
+
+# Imágenes originales sin optimizar (respaldos); las versiones web están en Menu.virtual/assets/
+imagenes.de.menu/
+*.png
+
+# Entorno / sistema
+.DS_Store
+Thumbs.db
+*.tmp

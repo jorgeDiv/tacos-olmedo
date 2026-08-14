@@ -1,0 +1,364 @@
+const defaultMenu = [
+    {
+        id: 1,
+        title: "Orden de 3 tacos",
+        desc: "Orden pequeña de tus tacos favoritos con todo.",
+        price: 45.00,
+        category: "tacos",
+        img: "assets/tacos.jpg"
+    },
+    {
+        id: 2,
+        title: "Orden de 5 tacos",
+        desc: "La orden clásica, deliciosos tacos con cilantro, cebolla y tu salsa favorita.",
+        price: 75.00,
+        category: "tacos",
+        badge: "Popular",
+        img: "assets/tacos.jpg"
+    },
+    {
+        id: 3,
+        title: "Orden de 7 tacos",
+        desc: "Para los más hambrientos. Excelente porción de tacos bien servidos.",
+        price: 100.00,
+        category: "tacos",
+        img: "assets/tacos.jpg"
+    },
+    {
+        id: 4,
+        title: "Torta de Carnitas",
+        desc: "Tradicional pan telera relleno de jugosas carnitas preparadas al momento.",
+        price: 50.00,
+        category: "tortas",
+        img: "assets/carnitas.jpg"
+    },
+    {
+        id: 5,
+        title: "Refresco",
+        desc: "Bebida fría en lata o botella para acompañar tus alimentos.",
+        price: 20.00,
+        category: "bebidas",
+        img: "assets/refresco.jpg"
+    },
+    {
+        id: 6,
+        title: "Agua Fresca",
+        desc: "Agua fresca de sabor natural, la mejor opción para refrescarte.",
+        price: 25.00,
+        category: "bebidas",
+        badge: "⭐ Favorito",
+        img: "assets/drinks.jpg"
+    },
+    {
+        id: 7,
+        title: "Combo: 5 Tacos + Agua Fresca",
+        desc: "Orden clásica de 5 tacos de surtido con tu agua fresca favorita.",
+        price: 90.00,
+        category: "combos",
+        badge: "Especial",
+        img: "assets/tacos.jpg"
+    },
+    {
+        id: 8,
+        title: "Combo: Torta + Agua Fresca",
+        desc: "Deliciosa torta de carnitas acompañada de una fresca agua de sabor.",
+        price: 70.00,
+        category: "combos",
+        img: "assets/tacos.jpg"
+    },
+    {
+        id: 9,
+        title: "Combo: 5 Tacos + Refresco de 350 ml",
+        desc: "La orden perfecta: 5 deliciosos tacos de surtido con un refresco frío de 350 ml.",
+        price: 90.00,
+        category: "combos",
+        img: "assets/tacos.jpg"
+    },
+    {
+        id: 10,
+        title: "Combo: Torta + Refresco de 350 ml",
+        desc: "Para el antojo: Deliciosa torta de carnitas acompañada de un refresco de 350 ml.",
+        price: 70.00,
+        category: "combos",
+        img: "assets/tacos.jpg"
+    }
+];
+
+let menuData = JSON.parse(localStorage.getItem('tacosMenu')) || defaultMenu;
+
+let cart = [];
+
+const menuGrid = document.getElementById('menuGrid');
+const cartItemsContainer = document.getElementById('cartItems');
+const cartCount = document.querySelector('.cart-count');
+const totalPriceElement = document.querySelector('.total-price');
+const cartSidebar = document.getElementById('cartSidebar');
+const cartToggle = document.getElementById('cartToggle');
+const closeCart = document.getElementById('closeCart');
+const checkoutBtn = document.querySelector('.checkout-btn');
+const catLinks = document.querySelectorAll('.cat-link');
+
+// Initial Render
+function renderMenu(category = 'all') {
+    menuGrid.innerHTML = '';
+    const filtered = category === 'all' ? menuData : menuData.filter(i => i.category === category);
+
+    filtered.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'menu-item';
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(20px)';
+
+        card.innerHTML = `
+            <div class="item-img-container">
+                <img src="${item.img}" alt="${item.title}" class="item-img" loading="lazy">
+                ${item.badge ? `<span class="item-badge">${item.badge}</span>` : ''}
+            </div>
+            <div class="item-info">
+                <h3 class="item-title">${item.title}</h3>
+                <p class="item-desc">${item.desc}</p>
+                <div class="item-footer">
+                    <span class="item-price">$${item.price.toFixed(2)}</span>
+                    <button class="add-btn" onclick="addToCart(${item.id})">
+                        <i data-lucide="plus"></i>
+                    </button>
+                </div>
+            </div>
+        `;
+        menuGrid.appendChild(card);
+
+        // Simple animation delay
+        setTimeout(() => {
+            card.style.transition = 'all 0.4s ease';
+            card.style.opacity = '1';
+            card.style.transform = 'translateY(0)';
+        }, 50);
+    });
+    lucide.createIcons();
+}
+
+// Cart Logic
+function addToCart(id) {
+    const item = menuData.find(i => i.id === id);
+    const existing = cart.find(i => i.id === id);
+
+    if (existing) {
+        existing.quantity += 1;
+    } else {
+        cart.push({ ...item, quantity: 1 });
+    }
+
+    updateCartUI();
+    showCart();
+}
+
+function updateCartUI() {
+    cartItemsContainer.innerHTML = '';
+    const notice = document.getElementById('shippingNotice');
+
+    if (cart.length === 0) {
+        cartItemsContainer.innerHTML = '<p class="empty-msg">Tu carrito está vacío</p>';
+        checkoutBtn.disabled = true;
+        if (notice) notice.style.display = 'none';
+    } else {
+        checkoutBtn.disabled = false;
+        // Check current delivery method
+        const delivery = document.querySelector('input[name="deliveryMethod"]:checked')?.value || 'Entrega';
+        if (notice) notice.style.display = (delivery === 'Entrega') ? 'flex' : 'none';
+
+        cart.forEach(item => {
+            const el = document.createElement('div');
+            el.className = 'cart-item-row';
+            el.style.padding = '1rem 0';
+            el.style.borderBottom = '1px solid rgba(255,255,255,0.05)';
+            el.innerHTML = `
+                <div style="display:flex;justify-content:space-between;align-items:center">
+                    <div>
+                        <h4 style="font-family:var(--font-header)">${item.title} x${item.quantity}</h4>
+                        <span style="color:var(--accent);font-weight:700">$${(item.price * item.quantity).toFixed(2)}</span>
+                    </div>
+                    <button onclick="removeFromCart(${item.id})" style="background:none;border:none;color:var(--text-secondary);cursor:pointer">
+                         <i data-lucide="trash-2" style="width:18px"></i>
+                    </button>
+                </div>
+            `;
+            cartItemsContainer.appendChild(el);
+        });
+    }
+
+    const count = cart.reduce((acc, cur) => acc + cur.quantity, 0);
+    let total = cart.reduce((acc, cur) => acc + (cur.price * cur.quantity), 0);
+
+    // Sumar envío si aplica
+    const delivery = document.querySelector('input[name="deliveryMethod"]:checked')?.value || 'Entrega';
+    if (delivery === 'Entrega' && total <= 300 && total > 0) {
+        total += 20;
+    }
+
+    cartCount.innerText = count;
+    totalPriceElement.innerText = `$${total.toFixed(2)}`;
+    lucide.createIcons();
+}
+
+function removeFromCart(id) {
+    cart = cart.filter(i => i.id !== id);
+    updateCartUI();
+}
+
+function showCart() {
+    cartSidebar.classList.add('open');
+}
+
+function hideCart() {
+    cartSidebar.classList.remove('open');
+}
+
+// Events
+cartToggle.onclick = () => {
+    showCart();
+    setTimeout(() => {
+        initMap();
+        if (map) map.invalidateSize();
+    }, 400);
+};
+closeCart.onclick = hideCart;
+
+catLinks.forEach(link => {
+    link.onclick = (e) => {
+        catLinks.forEach(l => l.classList.remove('active'));
+        e.target.classList.add('active');
+        renderMenu(e.target.dataset.category);
+    };
+});
+
+// Update notice when delivery method changes
+document.querySelectorAll('input[name="deliveryMethod"]').forEach(input => {
+    input.onchange = () => updateCartUI();
+});
+document.querySelectorAll('input[name="payment"]').forEach(input => {
+    input.onchange = () => updateCartUI();
+});
+
+window.onscroll = () => {
+    const btt = document.getElementById('backToTop');
+    if (window.scrollY > 300) btt.classList.add('show');
+    else btt.classList.remove('show');
+};
+
+document.getElementById('backToTop').onclick = () => window.scrollTo(0, 0);
+
+checkoutBtn.onclick = () => {
+    const text = cart.map(i => `${i.title} (x${i.quantity})`).join('\n');
+    const total = totalPriceElement.innerText;
+    const delivery = document.querySelector('input[name="deliveryMethod"]:checked').value;
+    const payment = document.querySelector('input[name="payment"]:checked').value;
+    const clientName = document.getElementById('clientName').value;
+    const clientPhone = document.getElementById('clientPhone').value;
+    const address = document.getElementById('deliveryAddress').value;
+    const notes = document.getElementById('orderNotes').value;
+    const adminPhone = localStorage.getItem('adminPhone') || "521234567890";
+
+    if (!clientName || !clientPhone) {
+        alert("Por favor ingresa tu nombre y un teléfono de contacto.");
+        return;
+    }
+
+    let typeMsg = "";
+    if (delivery === 'Entrega') typeMsg = "🏠 *Entrega:* A domicilio";
+    else if (delivery === 'Local') typeMsg = "🏃 *Entrega:* Recoger en local";
+
+    let payMsg = "";
+    if (payment === 'Efectivo') payMsg = "💵 *Pago:* Efectivo";
+    else if (payment === 'Transferencia') payMsg = "💳 *Pago:* Transferencia";
+    else if (payment === 'MercadoLibre') payMsg = "💳 *Pago:* Mercado Libre";
+
+    const customerMsg = `👤 *Cliente:* ${clientName}\n📞 *Teléfono:* ${clientPhone}`;
+    const locMsg = address ? `📍 *Ubicación:* ${address}` : "📍 *Ubicación:* Sin especificar";
+    const notesMsg = notes ? `\n📝 *Notas:* ${notes}` : "";
+
+    const msg = encodeURIComponent(`¡Hola Tacos Olmedo!\n\n🛍️ *Nuevo Pedido:*\n${text}\n\n💰 *Total:* ${total}\n${typeMsg}\n${payMsg}\n${customerMsg}\n${locMsg}${notesMsg}`);
+
+    // Save order for Admin/Repartidor
+    const orders = JSON.parse(localStorage.getItem('tacosOrders')) || [];
+    const newOrder = {
+        id: Date.now(),
+        items: cart,
+        total: total,
+        customerName: clientName,
+        customerPhone: clientPhone,
+        deliveryType: delivery,
+        paymentMethod: payment,
+        address: address,
+        notes: notes,
+        status: 'Pendiente',
+        date: new Date().toLocaleString()
+    };
+    orders.push(newOrder);
+    localStorage.setItem('tacosOrders', JSON.stringify(orders));
+
+    window.open(`https://wa.me/${adminPhone}?text=${msg}`);
+
+    // Optional: Clear cart after checkout
+    cart = [];
+    localStorage.setItem('tacosCart', JSON.stringify(cart));
+
+    // Clear inputs
+    document.getElementById('clientName').value = '';
+    document.getElementById('clientPhone').value = '';
+    document.getElementById('deliveryAddress').value = '';
+    document.getElementById('orderNotes').value = '';
+
+    updateCartUI();
+};
+
+// Start
+// Map Initialization
+let map, marker;
+function initMap() {
+    if (map) return; // Already init
+
+    // Default location (e.g. Mexico City)
+    const defLoc = [19.4326, -99.1332];
+    map = L.map('map-container').setView(defLoc, 13);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    map.on('click', function (e) {
+        setMarker(e.latlng.lat, e.latlng.lng);
+    });
+}
+
+function setMarker(lat, lng) {
+    if (marker) map.removeLayer(marker);
+    marker = L.marker([lat, lng]).addTo(map);
+    map.panTo([lat, lng]);
+
+    // Basic Reverse Geocoding with Nominatim (Free)
+    fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`)
+        .then(res => res.json())
+        .then(data => {
+            if (data.display_name) {
+                document.getElementById('deliveryAddress').value = data.display_name;
+            }
+        })
+        .catch(() => {
+            document.getElementById('deliveryAddress').value = `Ubicación: ${lat.toFixed(5)}, ${lng.toFixed(5)}`;
+        });
+}
+
+document.getElementById('confirmLocationBtn').onclick = () => {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition((pos) => {
+            setMarker(pos.coords.latitude, pos.coords.longitude);
+            map.setZoom(16);
+        }, () => {
+            alert("No se pudo obtener tu ubicación actual.");
+        });
+    } else {
+        alert("Geolocalización no soportada en este navegador.");
+    }
+};
+
+renderMenu();

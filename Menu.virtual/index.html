@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+    <link rel="apple-touch-icon" href="assets/logo-round.png">
+    <title>Tacos Olmedo | Menú Virtual</title>
+    <meta name="description"
+        content="Ordena los mejores tacos a domicilio con Tacos Olmedo. Calidad, sabor y tradición hasta tu puerta.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&family=Inter:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/lucide@1.31.0"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <img src="assets/logo-round.png" alt="Tacos Olmedo" class="logo-img">
+                <span class="logo-accent">TACOS</span> OLMEDO
+            </div>
+            <div class="nav-icons">
+                <button class="cart-btn" id="cartToggle">
+                    <i data-lucide="shopping-cart"></i>
+                    <span class="cart-count">0</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero">
+        <div class="hero-overlay"></div>
+        <img src="assets/hero.jpg" alt="Tacos Variados" class="hero-img" loading="eager" fetchpriority="high">
+        <div class="hero-content">
+            <h1 class="hero-title">El Sabor de la <br><span class="highlight">Tradición</span></h1>
+            <p class="hero-subtitle">Los mejores tacos del rumbo, directos a tu mesa.</p>
+            <a href="#menu" class="cta-btn">Ver el Menú</a>
+        </div>
+    </header>
+
+    <!-- Categories Nav -->
+    <div class="categories-nav-wrapper">
+        <div class="categories-nav" id="categoriesNav">
+            <button class="cat-link active" data-category="all">Todos</button>
+            <button class="cat-link" data-category="tacos">Tacos</button>
+            <button class="cat-link" data-category="tortas">Tortas</button>
+            <button class="cat-link" data-category="bebidas">Bebidas</button>
+            <button class="cat-link" data-category="combos">Combos</button>
+        </div>
+    </div>
+
+    <!-- Main Menu -->
+    <main class="menu-container" id="menu">
+        <section class="menu-grid" id="menuGrid">
+            <!-- Items will be injected by JavaScript -->
+        </section>
+    </main>
+
+    <!-- Cart Sidebar -->
+    <aside class="cart-sidebar" id="cartSidebar">
+        <div class="cart-header">
+            <h3>Tu Pedido</h3>
+            <button class="close-btn" id="closeCart">
+                <i data-lucide="x"></i>
+            </button>
+        </div>
+        <div class="cart-items" id="cartItems">
+            <!-- Cart items here -->
+            <p class="empty-msg">Tu carrito está vacío</p>
+        </div>
+        <div class="cart-footer">
+            <div class="shipping-notice" id="shippingNotice" style="flex-direction: column; align-items: flex-start; gap: 0.5rem;">
+                <div style="display: flex; align-items: center; gap: 0.4rem; color: var(--accent);">
+                    <i data-lucide="gift" style="width: 16px; height: 16px;"></i>
+                    <span>Envío sin costo en compras mayores a <strong>$300.00 MXN</strong></span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 0.4rem;">
+                    <i data-lucide="info" style="width: 16px; height: 16px;"></i>
+                    <span>Importante: se hará un cargo de <strong>$20.00 MXN</strong> por envío</span>
+                </div>
+            </div>
+
+            <!-- Customer Info -->
+            <div class="form-group" style="margin-top: 1rem;">
+                <label class="form-label" style="font-size: 0.8rem;">Nombre Completo:</label>
+                <input type="text" id="clientName" class="form-input" placeholder="Tu nombre..."
+                    style="font-size: 0.9rem; padding: 0.6rem;">
+            </div>
+            <div class="form-group" style="margin-top: 1rem;">
+                <label class="form-label" style="font-size: 0.8rem;">Teléfono de contacto:</label>
+                <input type="tel" id="clientPhone" class="form-input" placeholder="Tu número (10 dígitos)..."
+                    style="font-size: 0.9rem; padding: 0.6rem;">
+            </div>
+
+            <div class="form-group" style="margin-top: 1.5rem;">
+                <label class="form-label" style="font-size: 0.8rem;"><i data-lucide="map-pin"
+                        style="width: 12px; height: 12px; vertical-align: middle;"></i> Domicilio / Ubicación:</label>
+                <div id="map-container"
+                    style="height: 200px; border-radius: 12px; margin-bottom: 0.5rem; overflow: hidden; border: 1px solid var(--glass-border);">
+                </div>
+                <button type="button" class="admin-btn" id="confirmLocationBtn"
+                    style="width: 100%; font-size: 0.8rem; margin-bottom: 0.5rem; background: var(--glass); border: 1px solid var(--accent);">
+                    <i data-lucide="locate-fixed" style="width:14px;"></i> Fijar mi ubicación actual
+                </button>
+                <textarea id="deliveryAddress" class="form-input" rows="2"
+                    placeholder="Calle, Número, Colonia y Referencias..."
+                    style="resize: none; font-size: 0.9rem; padding: 0.6rem;"></textarea>
+            </div>
+            <div class="form-group" style="margin-top: 1rem;">
+                <label class="form-label" style="font-size: 0.8rem;">Notas adicionales (opcional):</label>
+                <textarea id="orderNotes" class="form-input" rows="2" placeholder="Ej: Sin cebolla, extra salsa..."
+                    style="resize: none; font-size: 0.9rem; padding: 0.6rem;"></textarea>
+            </div>
+            <div class="payment-methods">
+                <p class="payment-label" style="margin-bottom: 0.5rem; font-size: 0.9rem; font-weight: 600;">Tipo de entrega:</p>
+                <div class="payment-options" style="margin-bottom: 1rem;">
+                    <label class="payment-opt">
+                        <input type="radio" name="deliveryMethod" value="Entrega" checked>
+                        <span>A domicilio</span>
+                    </label>
+                    <label class="payment-opt">
+                        <input type="radio" name="deliveryMethod" value="Local">
+                        <span>Recoger local</span>
+                    </label>
+                </div>
+                
+                <p class="payment-label" style="margin-bottom: 0.5rem; font-size: 0.9rem; font-weight: 600;">Método de pago:</p>
+                <div class="payment-options">
+                    <label class="payment-opt">
+                        <input type="radio" name="payment" value="Efectivo" checked>
+                        <span>Efectivo</span>
+                    </label>
+                    <label class="payment-opt">
+                        <input type="radio" name="payment" value="Transferencia">
+                        <span>Transferencia</span>
+                    </label>
+                    <label class="payment-opt">
+                        <input type="radio" name="payment" value="MercadoLibre">
+                        <span>Mercado Libre</span>
+                    </label>
+                </div>
+            </div>
+            <div class="total-row">
+                <span>Total:</span>
+                <span class="total-price">$0.00</span>
+            </div>
+            <button class="checkout-btn" disabled>Confirmar por WhatsApp</button>
+        </div>
+    </aside>
+
+    <!-- Back to top -->
+    <button class="back-to-top" id="backToTop">
+        <i data-lucide="chevron-up"></i>
+    </button>
+
+    <footer class="main-footer">
+        <p>&copy; 2024 Tacos Olmedo. Sabor que une.</p>
+        <div class="footer-socials">
+            <a href="https://www.instagram.com/" target="_blank" rel="noopener" aria-label="Instagram"><i data-lucide="instagram"></i></a>
+            <a href="https://www.facebook.com/profile.php?id=61581131992454" target="_blank" rel="noopener" aria-label="Facebook"><i data-lucide="facebook"></i></a>
+        </div>
+        <div class="footer-socials" style="margin-top: 2rem;">
+            <a href="admin.html" style="color:var(--text-secondary); text-decoration:none; font-size:0.8rem;">Admin</a>
+            <span style="color:var(--glass-border);">|</span>
+            <a href="repartidor.html"
+                style="color:var(--text-secondary); text-decoration:none; font-size:0.8rem;">Repartidor</a>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+
+</html>

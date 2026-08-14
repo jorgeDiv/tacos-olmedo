@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Control | Tacos Olmedo</title>
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+    <link rel="apple-touch-icon" href="assets/logo-round.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&family=Inter:wght@400;500;700&family=Playfair+Display:wght@700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/lucide@1.31.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <style>
+        .admin-main {
+            max-width: 1000px;
+            margin: 100px auto;
+            padding: 2rem;
+        }
+
+        .admin-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .admin-title {
+            font-family: var(--font-header);
+            font-size: 1.8rem;
+            margin-bottom: 2rem;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .admin-btn {
+            padding: 0.8rem 1.5rem;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            font-weight: 700;
+            transition: var(--transition);
+        }
+
+        .admin-btn:hover {
+            box-shadow: 0 0 15px var(--accent-glow);
+            transform: translateY(-2px);
+        }
+
+        .order-row {
+            border: 1px solid var(--glass-border);
+            padding: 1.5rem;
+            border-radius: var(--radius-md);
+            margin-bottom: 1.5rem;
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .status-badge {
+            background: rgba(255, 77, 0, 0.2);
+            color: var(--accent);
+            padding: 4px 12px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .status-badge.delivered {
+            background: rgba(0, 255, 127, 0.2);
+            color: #00ff7f;
+        }
+
+        .status-badge.preparado {
+            background: rgba(66, 133, 244, 0.2);
+            color: #4285f4;
+        }
+
+        #loginScreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 3000;
+        }
+
+        .login-card {
+            background: var(--bg-secondary);
+            padding: 3rem;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--glass-border);
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .remove-btn {
+            color: var(--text-secondary);
+            background: none;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .remove-btn:hover {
+            color: #ff3333;
+        }
+
+        @media (max-width: 768px) {
+            .admin-main {
+                margin: 80px auto;
+                padding: 1rem;
+            }
+        }
+
+        /* Responsive utility grids */
+        .admin-grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .admin-grid-2 > * {
+            min-width: 0;
+        }
+
+        .report-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .report-grid > div {
+            min-width: 0;
+        }
+
+        .report-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        /* Phones & small tablets */
+        @media (max-width: 768px) {
+            .admin-grid-2,
+            .report-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .admin-title {
+                font-size: 1.4rem;
+            }
+
+            .admin-card {
+                padding: 1.25rem;
+            }
+
+            .report-actions {
+                flex-direction: column;
+            }
+
+            .report-actions .admin-btn {
+                width: 100%;
+            }
+
+            #reportPrintArea {
+                padding: 1.25rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .admin-main {
+                padding: 0.75rem;
+            }
+
+            .admin-card {
+                padding: 1rem;
+                border-radius: var(--radius-md);
+            }
+
+            .login-card {
+                padding: 2rem 1.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Login Screen -->
+    <div id="loginScreen">
+        <div class="login-card">
+            <h2 class="admin-title" style="justify-content: center;"><i data-lucide="lock"></i> Acceso Seguro</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 2rem;">Ingresa al panel administrativo</p>
+            <div class="form-group" style="text-align: left;">
+                <label class="form-label">Usuario</label>
+                <input type="text" id="loginUser" class="form-input" placeholder="Tu usuario">
+            </div>
+            <div class="form-group" style="text-align: left;">
+                <label class="form-label">Contraseña</label>
+                <input type="password" id="loginPass" class="form-input" placeholder="••••••••">
+            </div>
+            <button class="admin-btn" id="loginBtn" style="width: 100%; margin-top: 1rem;">Iniciar Sesión</button>
+            <p id="loginError" style="color: #ff3333; margin-top: 1rem; font-size: 0.9rem; display: none;">Credenciales
+                incorrectas</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div id="adminContent" style="display: none;">
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="logo"><img src="assets/logo-round.png" alt="Tacos Olmedo" class="logo-img"><span class="logo-accent">PANEL</span> CONTROL</div>
+                <a href="index.html"
+                    style="color: var(--text-secondary); text-decoration: none; font-weight: 600;">Cerrar Sesión</a>
+            </div>
+        </nav>
+
+        <main class="admin-main">
+            <!-- Maestro Taquero -->
+            <section class="admin-card" id="taqueroSection"
+                style="display: none; border-left: 5px solid var(--accent);">
+                <h2 class="admin-title"><i data-lucide="flame"></i> Maestro Taquero</h2>
+                <div id="taqueroOrdersList"></div>
+            </section>
+
+            <!-- Auxiliar -->
+            <section class="admin-card" id="auxiliarSection" style="display: none; border-left: 5px solid #00c851;">
+                <h2 class="admin-title"><i data-lucide="clipboard-check"></i> Auxiliar de Cocina</h2>
+                <div id="auxiliarOrdersList"></div>
+            </section>
+
+            <!-- Pedidos Activos (Admin / Caja) -->
+            <section class="admin-card" id="ordersSection" style="display: none;">
+                <div
+                    style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2rem;">
+                    <div>
+                        <h2 class="admin-title" style="margin-bottom: 0.5rem;"><i data-lucide="truck"></i> Gestión de
+                            Pedidos</h2>
+                        <div id="cashResumen" style="color: #28a745; font-weight: 700; font-size: 1.1rem;">
+                            Caja: <span id="cashValue">$0.00</span>
+                        </div>
+                    </div>
+                    <button class="admin-btn" id="generateRouteBtn" style="background: #28a745; font-size: 0.8rem;">
+                        <i data-lucide="map" style="width:16px;"></i> Ruta Óptima
+                    </button>
+                </div>
+                <div id="ordersList"></div>
+            </section>
+            <!-- Repartidor en tiempo real -->
+            <section class="admin-card" id="trackingSection" style="display: none; border-left: 5px solid #007bff;">
+                <h2 class="admin-title"><i data-lucide="map-pin"></i> Repartidor en tiempo real</h2>
+                <div id="adminTrackingMap" style="height: 350px; border-radius: 12px; background: rgba(0,0,0,0.2);"></div>
+                <p id="trackingStatus" style="margin-top: 1rem; color: var(--text-secondary); text-align: center; font-weight:600;">Esperando inicialización de GPS...</p>
+            </section>
+
+            <!-- Menu Management -->
+            <section class="admin-card" id="menuManagementSection" style="display: none;">
+                <h2 class="admin-title"><i data-lucide="utensils"></i> Gestión de Menú</h2>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;" class="admin-grid-2">
+                    <input type="text" id="itemName" class="form-input" placeholder="Nombre">
+                    <input type="number" id="itemPrice" class="form-input" placeholder="Precio">
+                    <select id="itemCat" class="form-input">
+                        <option value="tacos">Tacos</option>
+                        <option value="tortas">Tortas</option>
+                        <option value="bebidas">Bebidas</option>
+                        <option value="combos">Combos</option>
+                    </select>
+                    <input type="text" id="itemImg" class="form-input" placeholder="Ruta Imagen (ej: assets/tacos.jpg)">
+                </div>
+                <textarea id="itemDesc" class="form-input" placeholder="Descripción"
+                    style="margin: 1rem 0; resize: none;"></textarea>
+                <button class="admin-btn" id="addItem"><i data-lucide="plus-circle" style="width:16px; margin-right:5px; vertical-align:middle;"></i>Agregar al Menú</button>
+                <div id="adminMenuList" style="margin-top: 2rem;"></div>
+            </section>
+
+            <!-- WhatsApp Settings -->
+            <section class="admin-card" id="waManagementSection" style="display: none;">
+                <h2 class="admin-title"><i data-lucide="message-square"></i> WhatsApp</h2>
+                <input type="text" id="waNumber" class="form-input" placeholder="📱 521..."
+                    style="margin-bottom: 1rem;">
+                <button class="admin-btn" id="saveWA">Guardar Número</button>
+            </section>
+
+            <!-- User Management -->
+            <section class="admin-card" id="userManagementSection" style="display: none;">
+                <h2 class="admin-title"><i data-lucide="users"></i> Personal</h2>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;" class="admin-grid-2">
+                    <input type="text" id="newUserName" class="form-input" placeholder="Nombre completo">
+                    <select id="userRole" class="form-input">
+                        <option value="Administrador">Administrador</option>
+                        <option value="Recepcionista">Recepcionista</option>
+                        <option value="Maestro Taquero">Maestro Taquero</option>
+                        <option value="Auxiliar">Auxiliar</option>
+                    </select>
+                </div>
+                <button class="admin-btn" id="addUser" style="margin-top: 1rem;">Agregar Empleado</button>
+                <ul id="userList" style="list-style: none; margin-top: 2rem; padding: 0;"></ul>
+            </section>
+            <!-- Reporte de Ventas -->
+            <section class="admin-card" id="reportSection" style="display: none;">
+                <h2 class="admin-title"><i data-lucide="line-chart"></i> Reporte de Ventas</h2>
+                <div id="reportPrintArea"
+                    style="background:#fff; color:#000; padding:2rem; border-radius:12px; margin-bottom:1rem;">
+                    <div
+                        style="text-align:center; border-bottom:2px solid #ff4d00; padding-bottom:1rem; margin-bottom:2rem;">
+                        <h1 style="font-family:'Playfair Display', serif; color:#ff4d00; margin:0;">TACOS OLMEDO</h1>
+                        <p style="margin:5px 0;">Reporte de Ventas Diario</p>
+                        <small id="reportDateText"></small>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem;" class="report-grid">
+                        <div style="height: 250px;">
+                            <canvas id="salesChart"></canvas>
+                        </div>
+                        <div
+                            style="background:#f9f9f9; padding:1.5rem; border-radius:12px; display:flex; flex-direction:column; justify-content:center;">
+                            <div style="margin-bottom:1rem;">
+                                <span style="display:block; font-size:0.8rem; color:#666;">Total de Ventas:</span>
+                                <strong id="repTotalVentas" style="font-size:1.8rem; color:#ff4d00;">$0.00</strong>
+                            </div>
+                            <div>
+                                <span style="display:block; font-size:0.8rem; color:#666;">Pedidos Finalizados:</span>
+                                <strong id="repTotalPedidos" style="font-size:1.8rem; color:#333;">0</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="margin-top:2rem;">
+                        <h3 style="border-bottom:1px solid #ddd; padding-bottom:0.5rem;">Resumen por Categoría</h3>
+                        <div style="height: 280px; max-width: 480px; margin: 0 auto;">
+                            <canvas id="categoryChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div style="display:flex; gap:10px;" class="report-actions">
+                    <button class="admin-btn" id="generatePDFBtn" style="background:#dc3545;">
+                        <i data-lucide="file-text"></i> Generar PDF y WhatsApp
+                    </button>
+                    <button class="admin-btn" onclick="initCharts()" style="background:#444;">
+                        <i data-lucide="refresh-cw"></i> Actualizar Datos
+                    </button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        // DOM Elements
+        const loginBtn = document.getElementById('loginBtn');
+        const loginScreen = document.getElementById('loginScreen');
+        const adminContent = document.getElementById('adminContent');
+        const loginError = document.getElementById('loginError');
+
+        const taqueroSection = document.getElementById('taqueroSection');
+        const auxiliarSection = document.getElementById('auxiliarSection');
+        const ordersSection = document.getElementById('ordersSection');
+        const menuSection = document.getElementById('menuManagementSection');
+        const waSection = document.getElementById('waManagementSection');
+        const userSection = document.getElementById('userManagementSection');
+
+        const reportSection = document.getElementById('reportSection');
+        const trackingSection = document.getElementById('trackingSection');
+
+        // Credentials
+        const CREDENTIALS = {
+            'admin': { pass: 'tacos123', role: 'Administrador' },
+            'olmedo': { pass: 'TacosOlmedo2026!', role: 'Administrador' },
+            'caja': { pass: 'tacos000', role: 'Recepcionista' },
+            'maestro': { pass: 'tacos111', role: 'Maestro Taquero' },
+            'prepara': { pass: 'tacos222', role: 'Auxiliar' },
+            'moto': { pass: 'tacos789', role: 'Repartidor' }
+        };
+
+        loginBtn.onclick = () => {
+            const u = document.getElementById('loginUser').value;
+            const p = document.getElementById('loginPass').value;
+
+            if (CREDENTIALS[u] && CREDENTIALS[u].pass === p) {
+                showAdminPanel(CREDENTIALS[u].role);
+            } else {
+                loginError.style.display = 'block';
+            }
+        };
+
+        let currentRole = '';
+        function showAdminPanel(role) {
+            currentRole = role;
+            loginScreen.style.display = 'none';
+            adminContent.style.display = 'block';
+
+            [taqueroSection, auxiliarSection, ordersSection, menuSection, trackingSection, waSection, userSection, reportSection].forEach(s => { if(s) s.style.display = 'none'; });
+
+            if (role === 'Administrador') {
+                [taqueroSection, auxiliarSection, ordersSection, trackingSection, menuSection, waSection, userSection, reportSection].forEach(s => { if(s) s.style.display = 'block'; });
+                initCharts();
+                setTimeout(initTrackingMap, 300);
+            } else if (role === 'Recepcionista') {
+                [ordersSection, waSection, menuSection].forEach(s => s.style.display = 'block');
+            } else if (role === 'Maestro Taquero') {
+                taqueroSection.style.display = 'block';
+            } else if (role === 'Auxiliar') {
+                auxiliarSection.style.display = 'block';
+            } else if (role === 'Repartidor') {
+                ordersSection.style.display = 'block';
+            }
+
+            renderAll();
+        }
+
+        // Audio Alert
+        const alertSound = new Audio('https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3');
+        let lastCount = (JSON.parse(localStorage.getItem('tacosOrders')) || []).length;
+
+        setInterval(() => {
+            const orders = JSON.parse(localStorage.getItem('tacosOrders')) || [];
+            if (orders.length > lastCount) {
+                if (['Administrador', 'Recepcionista', 'Maestro Taquero', 'Auxiliar'].includes(currentRole)) {
+                    alertSound.play().catch(() => { });
+                }
+                lastCount = orders.length;
+                renderAll();
+            }
+        }, 5000);
+
+        function renderAll() {
+            renderOrders();
+            renderSpecialized();
+            renderAdminMenu();
+            renderUsers();
+            lucide.createIcons();
+        }
+
+        function updateOrderStatus(id, status) {
+            let orders = JSON.parse(localStorage.getItem('tacosOrders')) || [];
+            const idx = orders.findIndex(o => o.id === id);
+            if (idx !== -1) {
+                orders[idx].status = status;
+                localStorage.setItem('tacosOrders', JSON.stringify(orders));
+                renderAll();
+            }
+        }
+
+        function deleteOrder(id) {
+            if (!confirm('¿Borrar pedido?')) return;
+            let orders = JSON.parse(localStorage.getItem('tacosOrders')) || [];
+            orders = orders.filter(o => o.id !== id);
+            localStorage.setItem('tacosOrders', JSON.stringify(orders));
+            renderAll();
+        }
+
+        function renderOrders() {
+            const list = document.getElementById('ordersList');
+            const orders = JSON.parse(localStorage.getItem('tacosOrders')) || [];
+
+            // Total Cash
+            const total = orders.filter(o => o.status === 'Entregado').reduce((acc, o) => acc + parseFloat(o.total.replace('$', '')), 0);
+            document.getElementById('cashValue').innerText = `$${total.toFixed(2)}`;
+
+            list.innerHTML = orders.reverse().map(o => `
+                <div class="order-row">
+                    <div style="display:flex; justify-content:space-between;">
+                        <div>
+                            <span class="status-badge ${o.status.toLowerCase()}">${o.status}</span>
+                            <div style="font-size:0.7rem; color:var(--text-secondary); margin-top:5px;">${o.date}</div>
+                        </div>
+                        <button class="remove-btn" onclick="deleteOrder(${o.id})"><i data-lucide="trash-2" style="width:16px;"></i></button>
+                    </div>
+                    <div style="margin:1rem 0;"><strong>${o.customerName}</strong><br><small>${o.items.map(i => `${i.title} x${i.quantity}`).join(', ')}</small></div>
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <span style="color:var(--accent); font-weight:800;">${o.total}</span>
+                        <div style="display:flex; gap:5px;">
+                            ${o.status === 'Preparado' ? `<button class="admin-btn" style="padding:5px 10px; font-size:0.7rem;" onclick="updateOrderStatus(${o.id}, 'En Camino')">Despachar</button>` : ''}
+                            ${o.status === 'En Camino' ? `<button class="admin-btn" style="padding:5px 10px; font-size:0.7rem; background:#28a745;" onclick="updateOrderStatus(${o.id}, 'Entregado')">Finalizar</button>` : ''}
+                            ${o.status === 'Pendiente' ? `<button class="admin-btn" style="padding:5px 10px; font-size:0.7rem; background:#444;" onclick="updateOrderStatus(${o.id}, 'Preparado')">Listo</button>` : ''}
+                        </div>
+                    </div>
+                </div>
+            `).join('') || '<p style="text-align:center; color:var(--text-secondary);">No hay pedidos.</p>';
+        }
+
+        function renderSpecialized() {
+            const orders = JSON.parse(localStorage.getItem('tacosOrders')) || [];
+            const pending = orders.filter(o => o.status === 'Pendiente');
+
+            document.getElementById('taqueroOrdersList').innerHTML = pending.map(o => `
+                <div style="padding:1rem 0; border-bottom:1px solid rgba(255,255,255,0.05);">
+                    <strong>#${o.id.toString().slice(-4)}</strong> - <span>${o.items.map(i => `${i.title} x${i.quantity}`).join(', ')}</span>
+                </div>
+            `).join('') || '<p>Esperando...</p>';
+
+            document.getElementById('auxiliarOrdersList').innerHTML = pending.map(o => `
+                <div style="padding:1rem 0; border-bottom:1px solid rgba(255,255,255,0.05); display:flex; justify-content:space-between; align-items:center;">
+                    <div><strong>#${o.id.toString().slice(-4)}</strong><br><small>${o.notes || 'Sin notas'}</small></div>
+                    <button class="admin-btn" style="padding:5px 10px; font-size:0.7rem; background:#28a745;" onclick="updateOrderStatus(${o.id}, 'Preparado')">Empacado</button>
+                </div>
+            `).join('') || '<p>Esperando...</p>';
+        }
+
+        // WhatsApp Settings
+        const waNumInput = document.getElementById('waNumber');
+        waNumInput.value = localStorage.getItem('adminPhone') || "521...";
+        document.getElementById('saveWA').onclick = () => {
+            localStorage.setItem('adminPhone', waNumInput.value);
+            alert('Guardado');
+        };
+
+        // Menu & Users rendering (basic versions)
+        function renderAdminMenu() {
+            const container = document.getElementById('adminMenuList');
+            const menu = JSON.parse(localStorage.getItem('tacosMenu')) || [];
+            container.innerHTML = menu.map(m => `
+                <div style="display:flex; justify-content:space-between; align-items:center; padding:1rem; border-bottom:1px solid var(--glass-border); background:rgba(255,255,255,0.02); margin-bottom:0.8rem; border-radius:8px;">
+                    <div style="display:flex; gap:1rem; align-items:center; width:90%;">
+                        <img src="${m.img}" style="width:60px; height:60px; object-fit:cover; border-radius:8px;" alt="${m.title}" onerror="this.src='assets/tacos.jpg'">
+                        <div>
+                            <strong style="display:block; font-size:1.1rem; margin-bottom:2px;">${m.title} <span style="background:var(--accent);color:#fff;padding:2px 8px;border-radius:12px;font-size:0.7rem;vertical-align:middle;margin-left:5px;text-transform:uppercase;">${m.category}</span></strong>
+                            <small style="color:var(--text-secondary); display:block; margin-bottom:5px;">${m.desc || 'Sin descripción'}</small>
+                            <div style="color:var(--accent); font-weight:800; font-size:1rem;">$${Number(m.price).toFixed(2)}</div>
+                        </div>
+                    </div>
+                    <button class="remove-btn" onclick="removeItem(${m.id})"><i data-lucide="trash-2"></i></button>
+                </div>
+            `).join('');
+            lucide.createIcons();
+        }
+
+        window.removeItem = (id) => {
+            let menu = JSON.parse(localStorage.getItem('tacosMenu')) || [];
+            menu = menu.filter(m => m.id !== id);
+            localStorage.setItem('tacosMenu', JSON.stringify(menu));
+            renderAdminMenu();
+        };
+
+        document.getElementById('addItem').onclick = () => {
+            const title = document.getElementById('itemName').value;
+            const price = parseFloat(document.getElementById('itemPrice').value);
+            if (!title || isNaN(price)) return;
+            let menu = JSON.parse(localStorage.getItem('tacosMenu')) || [];
+            menu.push({ id: Date.now(), title, price, category: document.getElementById('itemCat').value, img: document.getElementById('itemImg').value, desc: document.getElementById('itemDesc').value });
+            localStorage.setItem('tacosMenu', JSON.stringify(menu));
+            renderAdminMenu();
+        };
+
+        function renderUsers() {
+            const container = document.getElementById('userList');
+            const users = JSON.parse(localStorage.getItem('adminUsers')) || [{ id: 1, name: 'Admin', role: 'Administrador' }];
+            container.innerHTML = users.map(u => `
+                <li style="display:flex; justify-content:space-between; padding:0.5rem; border-bottom:1px solid var(--glass-border);">
+                    <span>${u.name} (${u.role})</span>
+                    ${u.id !== 1 ? `<button class="remove-btn" onclick="removeUser(${u.id})"><i data-lucide="trash"></i></button>` : ''}
+                </li>
+            `).join('');
+        }
+
+        window.removeUser = (id) => {
+            let users = JSON.parse(localStorage.getItem('adminUsers')) || [];
+            users = users.filter(u => u.id !== id);
+            localStorage.setItem('adminUsers', JSON.stringify(users));
+            renderUsers();
+        };
+
+        document.getElementById('addUser').onclick = () => {
+            const name = document.getElementById('newUserName').value;
+            if (!name) return;
+            let users = JSON.parse(localStorage.getItem('adminUsers')) || [];
+            users.push({ id: Date.now(), name, role: document.getElementById('userRole').value });
+            localStorage.setItem('adminUsers', JSON.stringify(users));
+            renderUsers();
+        };
+
+        document.getElementById('generateRouteBtn').onclick = () => {
+            const orders = JSON.parse(localStorage.getItem('tacosOrders')) || [];
+            const addrs = orders.filter(o => o.status !== 'Entregado' && o.address).map(o => o.address);
+            if (!addrs.length) return alert('No hay direcciones');
+            window.open(`https://www.google.com/maps/dir/?api=1&origin=My+Location&destination=${encodeURIComponent(addrs[addrs.length - 1])}&waypoints=${addrs.slice(0, -1).map(a => encodeURIComponent(a)).join('|')}`, '_blank');
+        };
+
+        // Charts Logic
+        let sChart, cChart;
+        function initCharts() {
+            const orders = JSON.parse(localStorage.getItem('tacosOrders')) || [];
+            const finished = orders.filter(o => o.status === 'Entregado');
+
+            const dateEl = document.getElementById('reportDateText');
+            if (dateEl) dateEl.innerText = new Date().toLocaleDateString('es-MX', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+
+            const total = finished.reduce((acc, o) => acc + parseFloat(o.total.replace('$', '')), 0);
+            const totalVentasEl = document.getElementById('repTotalVentas');
+            const totalPedidosEl = document.getElementById('repTotalPedidos');
+            if (totalVentasEl) totalVentasEl.innerText = `$${total.toFixed(2)}`;
+            if (totalPedidosEl) totalPedidosEl.innerText = finished.length;
+
+            if (sChart) sChart.destroy();
+            if (cChart) cChart.destroy();
+
+            const cats = {};
+            finished.forEach(o => {
+                o.items.forEach(i => {
+                    cats[i.category] = (cats[i.category] || 0) + (i.price * i.quantity);
+                });
+            });
+
+            const sCanvas = document.getElementById('salesChart');
+            if (sCanvas) {
+                sChart = new Chart(sCanvas, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Ventas Totales'],
+                        datasets: [{
+                            label: 'Ingresos ($)',
+                            data: [total],
+                            backgroundColor: '#ff4d00'
+                        }]
+                    },
+                    options: { responsive: true, maintainAspectRatio: false }
+                });
+            }
+
+            const cCanvas = document.getElementById('categoryChart');
+            if (cCanvas) {
+                cChart = new Chart(cCanvas, {
+                    type: 'doughnut',
+                    data: {
+                        labels: Object.keys(cats),
+                        datasets: [{
+                            data: Object.values(cats),
+                            backgroundColor: ['#ff4d00', '#00c851', '#4285f4', '#ffbb33']
+                        }]
+                    },
+                    options: { responsive: true, maintainAspectRatio: false }
+                });
+            }
+        }
+
+        document.getElementById('generatePDFBtn').onclick = () => {
+            const element = document.getElementById('reportPrintArea');
+            const opt = {
+                margin: 0.5,
+                filename: `Reporte_TacosOlmedo_${new Date().toISOString().slice(0, 10)}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+            };
+
+            html2pdf().set(opt).from(element).save().then(() => {
+                const total = document.getElementById('repTotalVentas').innerText;
+                const pedidos = document.getElementById('repTotalPedidos').innerText;
+                const fecha = document.getElementById('reportDateText').innerText;
+
+                const msg = encodeURIComponent(`📊 *REPORTE DIARIO - TACOS OLMEDO*\n\n📅 *Fecha:* ${fecha}\n💰 *Total Vendido:* ${total}\n📦 *Pedidos Finalizados:* ${pedidos}\n\n_El archivo PDF ha sido generado y descargado._`);
+                window.open(`https://wa.me/523211056948?text=${msg}`);
+            });
+        };
+
+        // Tracking logic
+        let adminMap, adminMarker;
+        function initTrackingMap() {
+            if (!document.getElementById('adminTrackingMap') || adminMap) return;
+            adminMap = L.map('adminTrackingMap').setView([20.0, -99.0], 12);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap'
+            }).addTo(adminMap);
+            
+            setInterval(updateAdminTracking, 3000);
+            updateAdminTracking();
+        }
+
+        function updateAdminTracking() {
+            if (!adminMap) return;
+            const locStr = localStorage.getItem('repartidorLocation');
+            const statusEl = document.getElementById('trackingStatus');
+            if (locStr) {
+                try {
+                    const loc = JSON.parse(locStr);
+                    if (loc && loc.lat && loc.lng) {
+                        const latLng = [loc.lat, loc.lng];
+                        if (!adminMarker) {
+                            adminMarker = L.marker(latLng).addTo(adminMap);
+                            adminMap.setView(latLng, 16);
+                        } else {
+                            adminMarker.setLatLng(latLng);
+                        }
+                        
+                        let timeMsg = "";
+                        if(loc.timestamp) {
+                            const diff = Math.floor((Date.now() - loc.timestamp) / 1000);
+                            timeMsg = diff < 10 ? ' (Actualizado ahora)' : ` (Hace ${diff}s)`;
+                        }
+                        statusEl.innerText = `📍 Repartidor transmitiendo GPS ${timeMsg}`;
+                        statusEl.style.color = '#28a745';
+                    }
+                } catch(e) {}
+            } else {
+                statusEl.innerText = "Esperando ubicación. El repartidor necesita estar logueado y transmitir.";
+                statusEl.style.color = "var(--text-secondary)";
+            }
+        }
+
+        renderAdminMenu();
+        renderUsers();
+        renderOrders();
+        lucide.createIcons();
+    </script>
+</body>
+
+</html>
