@@ -14,10 +14,8 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&family=Inter:wght@400;500;700&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="style.css">
     <script src="https://unpkg.com/lucide@1.31.0"></script>
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 </head>
 
 <body>
@@ -74,74 +72,76 @@
                     <i data-lucide="clipboard-list" style="width:20px; height:20px; color:var(--accent);"></i>
                     Tu Pedido
                 </h3>
-                <button class="close-btn" id="closeCart">
+                <button class="close-btn" id="closeCart" aria-label="Cerrar">
                     <i data-lucide="x"></i>
                 </button>
             </div>
-            <div class="cart-items" id="cartItems">
-                <!-- Cart items here -->
-                <p class="empty-msg">Tu carrito está vacío</p>
+
+            <div class="cart-scroll">
+                <div class="cart-items" id="cartItems">
+                    <!-- Cart items here -->
+                    <p class="empty-msg">Tu carrito está vacío</p>
+                </div>
+
+                <div class="cart-footer">
+                    <!-- Leyenda de envío -->
+                    <div class="shipping-notice" id="shippingNotice">
+                        <i data-lucide="truck" style="width:16px; height:16px; flex-shrink:0;"></i>
+                        <span><strong>Cargo por envío $20.00 MXN</strong>, Envío sin costo solo en compras mayores a <strong>$300.00 MXN</strong>.</span>
+                    </div>
+
+                    <!-- Datos del cliente -->
+                    <div class="form-group">
+                        <label class="form-label" for="clientName">Nombre:</label>
+                        <input type="text" id="clientName" class="form-input" placeholder="Tu nombre...">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="clientPhone">Teléfono de contacto:</label>
+                        <input type="tel" id="clientPhone" class="form-input" placeholder="Tu número (10 dígitos)...">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="deliveryAddress">
+                            <i data-lucide="map-pin" style="width:13px; height:13px; vertical-align:middle;"></i>
+                            Dirección de entrega:
+                        </label>
+                        <textarea id="deliveryAddress" class="form-input" rows="2"
+                            placeholder="Calle, Número, Colonia y Referencias..."></textarea>
+                        <button type="button" class="locate-btn" id="confirmLocationBtn">
+                            <i data-lucide="locate-fixed" style="width:14px;"></i> Usar mi ubicación actual
+                        </button>
+                        <input type="hidden" id="clientCoords">
+                    </div>
+
+                    <!-- Método de pago -->
+                    <div class="payment-methods">
+                        <p class="payment-label">Método de pago:</p>
+                        <div class="payment-options">
+                            <label class="payment-opt">
+                                <input type="radio" name="payment" value="Efectivo" checked>
+                                <span class="pay-pill"><i data-lucide="banknote" style="width:15px;"></i> Efectivo</span>
+                            </label>
+                            <label class="payment-opt">
+                                <input type="radio" name="payment" value="Transferencia">
+                                <span class="pay-pill"><i data-lucide="landmark" style="width:15px;"></i> Transferencia</span>
+                            </label>
+                            <label class="payment-opt">
+                                <input type="radio" name="payment" value="Mercado Pago">
+                                <span class="pay-pill"><i data-lucide="credit-card" style="width:15px;"></i> Mercado Pago</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="cart-footer">
-                <!-- Leyenda de envío -->
-                <div class="shipping-notice" id="shippingNotice"
-                    style="display: flex; flex-direction: column; gap: 0.4rem; margin-bottom: 1.25rem; font-size: 0.82rem; color: var(--text-secondary);">
-                    <span><strong style="color:var(--accent);">Cargo por envío $20.00 MXN</strong>, Envío sin costo solo en compras mayores a <strong>$300.00 MXN</strong>.</span>
-                </div>
 
-                <!-- Datos del cliente -->
-                <div class="form-group" style="margin-bottom: 1rem;">
-                    <label class="form-label" style="font-size: 0.8rem;">Nombre:</label>
-                    <input type="text" id="clientName" class="form-input" placeholder="Tu nombre..."
-                        style="font-size: 0.9rem; padding: 0.6rem;">
-                </div>
-                <div class="form-group" style="margin-bottom: 1rem;">
-                    <label class="form-label" style="font-size: 0.8rem;"><i data-lucide="map-pin"
-                        style="width: 12px; height: 12px; vertical-align: middle;"></i> Dirección de entrega:</label>
-                    <div id="map-container"
-                        style="height: 180px; border-radius: 12px; margin-bottom: 0.5rem; overflow: hidden; border: 1px solid var(--glass-border);">
-                    </div>
-                    <button type="button" class="admin-btn" id="confirmLocationBtn"
-                        style="width: 100%; font-size: 0.8rem; margin-bottom: 0.5rem; background: var(--glass); border: 1px solid var(--accent); color: white; padding: 0.6rem; border-radius: var(--radius-md); cursor: pointer;">
-                        <i data-lucide="locate-fixed" style="width:14px;"></i> Fijar mi ubicación actual
-                    </button>
-                    <textarea id="deliveryAddress" class="form-input" rows="2"
-                        placeholder="Calle, Número, Colonia y Referencias..."
-                        style="resize: none; font-size: 0.9rem; padding: 0.6rem;"></textarea>
-                </div>
-
-                <!-- Método de pago -->
-                <div class="payment-methods" style="margin-bottom: 1rem;">
-                    <p class="payment-label" style="margin-bottom: 0.5rem; font-size: 0.9rem; font-weight: 600;">Método de pago:</p>
-                    <div class="payment-options">
-                        <label class="payment-opt">
-                            <input type="radio" name="payment" value="Efectivo" checked>
-                            <span>Efectivo</span>
-                        </label>
-                        <label class="payment-opt">
-                            <input type="radio" name="payment" value="Transferencia">
-                            <span>Transferencia</span>
-                        </label>
-                        <label class="payment-opt">
-                            <input type="radio" name="payment" value="Mercado Pago">
-                            <span>Mercado Pago</span>
-                        </label>
-                    </div>
-                </div>
-
-                <!-- Teléfono (necesario para contacto) -->
-                <div class="form-group" style="margin-bottom: 1rem;">
-                    <label class="form-label" style="font-size: 0.8rem;">Teléfono de contacto:</label>
-                    <input type="tel" id="clientPhone" class="form-input" placeholder="Tu número (10 dígitos)..."
-                        style="font-size: 0.9rem; padding: 0.6rem;">
-                </div>
-
-                <!-- Total del carrito -->
+            <!-- Barra fija inferior: total + confirmar -->
+            <div class="cart-actions">
                 <div class="total-row">
                     <span>Total del carrito:</span>
                     <span class="total-price">$0.00</span>
                 </div>
-                <button class="checkout-btn" disabled>Confirmar por WhatsApp</button>
+                <button class="checkout-btn" disabled>Confirmar pedido por WhatsApp</button>
             </div>
         </div>
     </aside>

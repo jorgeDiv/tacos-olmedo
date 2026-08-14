@@ -211,13 +211,7 @@ function hideCart() {
 }
 
 // Events
-cartToggle.onclick = () => {
-    showCart();
-    setTimeout(() => {
-        initMap();
-        if (map) map.invalidateSize();
-    }, 400);
-};
+cartToggle.onclick = () => { showCart(); };
 closeCart.onclick = hideCart;
 
 catLinks.forEach(link => {
@@ -297,52 +291,24 @@ checkoutBtn.onclick = () => {
 
 // Start
 // Map Initialization
-let map, marker;
-function initMap() {
-    if (map) return; // Already init
-
-    // Default location (e.g. Mexico City)
-    const defLoc = [19.4326, -99.1332];
-    map = L.map('map-container').setView(defLoc, 13);
-
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© OpenStreetMap contributors'
-    }).addTo(map);
-
-    map.on('click', function (e) {
-        setMarker(e.latlng.lat, e.latlng.lng);
-    });
-}
-
-function setMarker(lat, lng) {
-    if (marker) map.removeLayer(marker);
-    marker = L.marker([lat, lng]).addTo(map);
-    map.panTo([lat, lng]);
-
-    // Basic Reverse Geocoding with Nominatim (Free)
-    fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`)
-        .then(res => res.json())
-        .then(data => {
-            if (data.display_name) {
-                document.getElementById('deliveryAddress').value = data.display_name;
-            }
-        })
-        .catch(() => {
-            document.getElementById('deliveryAddress').value = `Ubicación: ${lat.toFixed(5)}, ${lng.toFixed(5)}`;
-        });
-}
-
+// Geolocalización nativa (sin mapa externo): guarda lat/lng en campo oculto
 document.getElementById('confirmLocationBtn').onclick = () => {
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition((pos) => {
-            setMarker(pos.coords.latitude, pos.coords.longitude);
-            map.setZoom(16);
-        }, () => {
-            alert("No se pudo obtener tu ubicación actual.");
-        });
-    } else {
+    const coordsField = document.getElementById('clientCoords');
+    const addrField = document.getElementById('deliveryAddress');
+    if (!navigator.geolocation) {
         alert("Geolocalización no soportada en este navegador.");
+        return;
     }
+    navigator.geolocation.getCurrentPosition((pos) => {
+        const lat = pos.coords.latitude.toFixed(6);
+        const lng = pos.coords.longitude.toFixed(6);
+        coordsField.value = `${lat},${lng}`;
+        if (!addrField.value.trim()) {
+            addrField.value = `Ubicación actual: ${lat}, ${lng}`;
+        }
+    }, () => {
+        alert("No se pudo obtener tu ubicación. Escribe tu dirección manualmente.");
+    });
 };
 
 renderMenu();
