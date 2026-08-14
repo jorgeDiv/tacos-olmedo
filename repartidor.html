@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Repartidor | Tacos Olmedo</title>
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+    <link rel="apple-touch-icon" href="assets/logo-round.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&family=Inter:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/lucide@1.31.0"></script>
+    <style>
+        .repartidor-main {
+            max-width: 600px;
+            margin: 80px auto;
+            padding: 1.5rem;
+        }
+
+        .order-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: var(--transition);
+        }
+
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .status-pendiente {
+            background: rgba(255, 193, 7, 0.2);
+            color: #ffc107;
+        }
+
+        .status-en-camino {
+            background: rgba(0, 123, 255, 0.2);
+            color: #007bff;
+        }
+
+        .status-entregado {
+            background: rgba(40, 167, 69, 0.2);
+            color: #28a745;
+        }
+
+        .btn-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.8rem;
+            margin-top: 1.5rem;
+        }
+
+        .action-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.8rem;
+            border-radius: var(--radius-md);
+            border: none;
+            color: white;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .btn-maps {
+            background: #4285F4;
+        }
+
+        .btn-call {
+            background: #34b7f1;
+        }
+
+        .btn-status {
+            background: var(--accent);
+        }
+
+        .btn-done {
+            background: #28a745;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            padding: 1rem;
+            border-radius: var(--radius-md);
+            text-align: center;
+        }
+
+        .stat-value {
+            display: block;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--accent);
+        }
+
+        .stat-label {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .tabs-header {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            overflow-x: auto;
+            padding-bottom: 0.5rem;
+        }
+
+        .tab-btn {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            color: var(--text-secondary);
+            padding: 0.6rem 1.2rem;
+            border-radius: 50px;
+            white-space: nowrap;
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .tab-btn.active {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+
+        #loginRepartidor {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+
+        .login-box {
+            background: var(--bg-secondary);
+            padding: 2.5rem;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--glass-border);
+            width: 90%;
+            max-width: 350px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Login Section -->
+    <div id="loginRepartidor">
+        <div class="login-box">
+            <div class="logo" style="margin-bottom: 1.5rem;"><img src="assets/logo-round.png" alt="Tacos Olmedo" class="logo-img"><span class="logo-accent">SOY</span> REPARTIDOR</div>
+            <div class="form-group" style="text-align: left;">
+                <label class="form-label">Contraseña de acceso</label>
+                <input type="password" id="passRepartidor" class="form-input" placeholder="••••••••">
+            </div>
+            <button class="checkout-btn" onclick="checkAuth()" style="margin-top: 1rem;">Acceder a Mis Entregas</button>
+            <p id="errorMsg" style="color: #ff4444; margin-top: 1rem; font-size: 0.8rem; display: none;">Contraseña
+                incorrecta</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div id="contentRepartidor" style="display: none;">
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="logo"><img src="assets/logo-round.png" alt="Tacos Olmedo" class="logo-img"><span class="logo-accent">RUTA</span> ENTREGA</div>
+                <button onclick="logout()" class="cart-btn"><i data-lucide="log-out"></i></button>
+            </div>
+        </nav>
+
+        <main class="repartidor-main">
+            <!-- Stats -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span class="stat-value" id="statPending">0</span>
+                    <span class="stat-label">Pendientes</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value" id="statInTransit">0</span>
+                    <span class="stat-label">En Ruta</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value" id="statCash">0</span>
+                    <span class="stat-label">Por Cobrar</span>
+                </div>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                <h2 style="font-family: var(--font-header);">Panel de Control</h2>
+                <button class="action-btn btn-done" onclick="generateRoute()"
+                    style="padding: 0.5rem 1rem; font-size: 0.8rem;">
+                    <i data-lucide="map"></i> Ruta Óptima
+                </button>
+            </div>
+
+            <div class="tabs-header">
+                <button class="tab-btn active" onclick="filterOrders('Todo', this)">Todos</button>
+                <button class="tab-btn" onclick="filterOrders('Pendiente', this)">Por Salir</button>
+                <button class="tab-btn" onclick="filterOrders('En Camino', this)">En Entrega</button>
+                <button class="tab-btn" onclick="filterOrders('Entregado', this)">Entregados</button>
+            </div>
+
+            <div id="repartidorOrdersList">
+                <!-- Orders dynamic -->
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const REPARTIDOR_PASS = "tacos789";
+
+        let currentTab = 'Todo';
+
+        function checkAuth() {
+            const pass = document.getElementById('passRepartidor').value;
+            if (pass === REPARTIDOR_PASS) {
+                document.getElementById('loginRepartidor').style.display = 'none';
+                document.getElementById('contentRepartidor').style.display = 'block';
+                updateStats();
+                renderRepartidorOrders();
+                
+                // Activar GPS Tracking en segundo plano
+                if (navigator.geolocation) {
+                    navigator.geolocation.watchPosition(pos => {
+                        const data = {
+                            lat: pos.coords.latitude,
+                            lng: pos.coords.longitude,
+                            speed: pos.coords.speed ? (pos.coords.speed * 3.6) : null,
+                            timestamp: Date.now()
+                        };
+                        localStorage.setItem('repartidorLocation', JSON.stringify(data));
+                    }, err => {
+                        console.error("No se pudo obtener GPS", err);
+                    }, { enableHighAccuracy: true });
+                }
+            } else {
+                document.getElementById('errorMsg').style.display = 'block';
+            }
+        }
+
+        function filterOrders(status, btn) {
+            currentTab = status;
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            renderRepartidorOrders();
+        }
+
+        function updateStats() {
+            const orders = JSON.parse(localStorage.getItem('tacosOrders')) || [];
+            const pending = orders.filter(o => o.status === 'Pendiente').length;
+            const inTransit = orders.filter(o => o.status === 'En Camino').length;
+
+            // Calculate cash to collect (from non-delivered cash orders)
+            const cash = orders
+                .filter(o => o.status !== 'Entregado' && o.deliveryType === 'Entrega' && (!o.paymentMethod || o.paymentMethod === 'Efectivo'))
+                .reduce((acc, o) => acc + parseFloat(o.total.replace('$', '').replace(' MXN', '')), 0);
+
+            document.getElementById('statPending').innerText = pending;
+            document.getElementById('statInTransit').innerText = inTransit;
+            document.getElementById('statCash').innerText = `$${cash.toFixed(2)}`;
+        }
+
+        function logout() {
+            location.reload();
+        }
+
+        function renderRepartidorOrders() {
+            const container = document.getElementById('repartidorOrdersList');
+            let orders = JSON.parse(localStorage.getItem('tacosOrders')) || [];
+
+            if (currentTab !== 'Todo') {
+                orders = orders.filter(o => o.status === currentTab);
+            }
+
+            if (orders.length === 0) {
+                container.innerHTML = `<p style="text-align:center; color:var(--text-secondary); margin-top:2rem;">No hay pedidos en la sección <strong>${currentTab}</strong>.</p>`;
+                return;
+            }
+
+            container.innerHTML = orders.reverse().map(order => `
+                <div class="order-card">
+                    <div style="display:flex; justify-content:space-between; align-items:start; margin-bottom:1rem;">
+                        <div>
+                            <span class="status-badge status-${order.status.toLowerCase().replace(' ', '-')}">${order.status}</span>
+                            <div style="color:var(--text-secondary); font-size:0.75rem; margin-top:5px;">#${order.id}</div>
+                        </div>
+                        <div style="text-align:right">
+                            <div style="font-weight:800; color:var(--accent);">${order.total}</div>
+                            ${order.paymentMethod && order.paymentMethod !== 'Efectivo' ? `<div style="font-size:0.75rem; color:#28a745; font-weight:600;">(Pagado: ${order.paymentMethod})</div>` : `<div style="font-size:0.75rem; color:#ffc107; font-weight:600;">(Cobrar en Efectivo)</div>`}
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom:1rem;">
+                        <span style="font-size:0.8rem; color:var(--text-secondary); display:block;">Nombre del cliente:</span>
+                        <strong style="font-size:1.1rem; display:block; margin-bottom:0.5rem;">${order.customerName}</strong>
+                        
+                        <span style="font-size:0.8rem; color:var(--text-secondary); display:block;">Pedido:</span>
+                        <span style="color:var(--text-primary); font-size:0.9rem;">${order.items.map(i => `${i.title} x${i.quantity}`).join(', ')}</span>
+                    </div>
+
+                    <div style="background:rgba(255,255,255,0.03); padding:1rem; border-radius:12px; margin-bottom:1rem; border-left:4px solid var(--accent);">
+                        <div style="font-size:0.85rem; margin-bottom:0.5rem;"><strong>📍 Dirección:</strong> ${order.address || 'Recoger en local'}</div>
+                        ${order.notes ? `<div style="font-size:0.85rem; font-style:italic; color:var(--text-secondary);"><strong>📝 Notas:</strong> ${order.notes}</div>` : ''}
+                    </div>
+
+                    <div class="btn-group">
+                        ${order.address ? `<a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(order.address)}" target="_blank" class="action-btn btn-maps"><i data-lucide="navigation"></i> Ir en GPS</a>` : ''}
+                        <a href="tel:${order.customerPhone}" class="action-btn btn-call"><i data-lucide="phone"></i> Llamar</a>
+                        
+                        ${order.status === 'Pendiente' ? `
+                            <button onclick="updateStatus(${order.id}, 'En Camino')" class="action-btn btn-status" style="grid-column: span 2;">Marcar En Camino</button>
+                        ` : ''}
+                        
+                        ${order.status === 'En Camino' ? `
+                            <button onclick="updateStatus(${order.id}, 'Entregado')" class="action-btn btn-done" style="grid-column: span 2;">Confirmar Entrega</button>
+                        ` : ''}
+                    </div>
+                </div>
+            `).join('');
+
+            lucide.createIcons();
+        }
+
+        function updateStatus(id, newStatus) {
+            const orders = JSON.parse(localStorage.getItem('tacosOrders')) || [];
+            const idx = orders.findIndex(o => o.id === id);
+            if (idx !== -1) {
+                orders[idx].status = newStatus;
+                localStorage.setItem('tacosOrders', JSON.stringify(orders));
+                updateStats();
+                renderRepartidorOrders();
+            }
+        }
+
+        function generateRoute() {
+            const orders = JSON.parse(localStorage.getItem('tacosOrders')) || [];
+            const addresses = orders
+                .filter(o => o.status !== 'Entregado' && o.address && o.deliveryType === 'Entrega')
+                .map(o => o.address);
+
+            if (addresses.length === 0) return alert('No hay entregas pendientes.');
+
+            const dest = encodeURIComponent(addresses[addresses.length - 1]);
+            const waypoints = addresses.slice(0, -1).map(a => encodeURIComponent(a)).join('|');
+            window.open(`https://www.google.com/maps/dir/?api=1&origin=My+Location&destination=${dest}${waypoints ? '&waypoints=' + waypoints : ''}`, '_blank');
+        }
+
+        lucide.createIcons();
+    </script>
+</body>
+
+</html>
