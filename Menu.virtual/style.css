@@ -355,6 +355,8 @@ body {
     align-items: center;
     justify-content: center;
     padding: clamp(1rem, 4vw, 3rem);
+    max-height: 86vh;
+    overflow: hidden;
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.35s ease, visibility 0.35s ease;
@@ -376,10 +378,10 @@ body {
     visibility: visible;
 }
 
-/* Panel central con glass y scroll propio */
+/* Panel central con glass y scroll propio (ventana compacta) */
 .cart-sidebar > * {
     width: 100%;
-    max-width: 720px;
+    max-width: 520px;
     margin-left: auto;
     margin-right: auto;
 }
