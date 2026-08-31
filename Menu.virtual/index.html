@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,7 +16,6 @@
     <link rel="stylesheet" href="style.css">
     <script src="https://unpkg.com/lucide@1.31.0"></script>
 </head>
-
 <body>
     <!-- Navbar -->
     <nav class="navbar">
@@ -34,7 +32,6 @@
             </div>
         </div>
     </nav>
-
     <!-- Hero Section -->
     <header class="hero">
         <div class="hero-overlay"></div>
@@ -45,7 +42,6 @@
             <a href="#menu" class="cta-btn">Ver el Menú</a>
         </div>
     </header>
-
     <!-- Categories Nav -->
     <div class="categories-nav-wrapper">
         <div class="categories-nav" id="categoriesNav">
@@ -53,17 +49,14 @@
             <button class="cat-link" data-category="tacos">Tacos</button>
             <button class="cat-link" data-category="tortas">Tortas</button>
             <button class="cat-link" data-category="bebidas">Bebidas</button>
-            <button class="cat-link" data-category="combos">Combos</button>
         </div>
     </div>
-
     <!-- Main Menu -->
     <main class="menu-container" id="menu">
         <section class="menu-grid" id="menuGrid">
             <!-- Items will be injected by JavaScript -->
         </section>
     </main>
-
     <!-- Cart Sidebar (overlay transparente) -->
     <aside class="cart-sidebar" id="cartSidebar" aria-hidden="true">
         <div class="cart-panel" role="dialog" aria-modal="true" aria-label="Tu Pedido">
@@ -76,28 +69,23 @@
                     <i data-lucide="x"></i>
                 </button>
             </div>
-
             <div class="cart-body">
                 <div class="cart-items" id="cartItems">
                     <p class="empty-msg">Tu carrito está vacío</p>
                 </div>
-
                 <div class="cart-form">
                     <p class="shipping-notice">
                         <i data-lucide="truck"></i>
                         <span><b>Cargo por envío $20.00 MXN</b>, Envío sin costo solo en compras mayores a <b>$300.00 MXN</b>.</span>
                     </p>
-
                     <div class="field">
                         <label for="clientName">Nombre</label>
                         <input type="text" id="clientName" placeholder="Tu nombre">
                     </div>
-
                     <div class="field">
                         <label for="clientPhone">Teléfono</label>
                         <input type="tel" id="clientPhone" placeholder="10 dígitos">
                     </div>
-
                     <div class="field">
                         <label for="deliveryAddress">Dirección de entrega</label>
                         <textarea id="deliveryAddress" rows="2" placeholder="Calle, Número, Colonia, Referencias"></textarea>
@@ -105,30 +93,17 @@
                             <i data-lucide="map-pin"></i> Usar mi ubicación
                         </button>
                     </div>
-
                     <div class="field">
                         <label>Método de pago</label>
                         <div class="pay-grid">
                             <label class="pay-opt">
                                 <input type="radio" name="payment" value="Efectivo" checked>
-                                <span><i data-lucide="banknote"></i> Efectivo</span>
+                                <span><i data-lucide="banknote"></i> Efectivo (Contraentrega)</span>
                             </label>
-                            <label class="pay-opt">
-                                <input type="radio" name="payment" value="Transferencia">
-                                <span><i data-lucide="landmark"></i> Transferencia</span>
-                            </label>
-                            <label class="pay-opt">
-                                <input type="radio" name="payment" value="Mercado Pago">
-                                <span><i data-lucide="credit-card"></i> Mercado Pago</span>
-                            </label>
-                        </div>
-                        <div id="mpLinkBox" style="display:none; margin-top:0.6rem; padding:0.6rem 0.75rem; background:rgba(255,77,0,0.08); border:1px solid rgba(255,77,0,0.3); border-radius:10px; font-size:0.8rem; color:var(--text-secondary);">
-                            Paga tu pedido aquí: <a id="mpLink" href="#" target="_blank" rel="noopener" style="color:var(--accent); font-weight:600; word-break:break-all;">link.mercadopago.com.mx/tacosolmedo</a>
                         </div>
                     </div>
                 </div>
             </div>
-
             <div class="cart-foot">
                 <div class="total-row">
                     <span>Total del carrito</span>
@@ -138,12 +113,10 @@
             </div>
         </div>
     </aside>
-
     <!-- Back to top -->
     <button class="back-to-top" id="backToTop">
         <i data-lucide="chevron-up"></i>
     </button>
-
     <footer class="main-footer">
         <p>&copy; 2024 Tacos Olmedo. Sabor que une.</p>
         <div class="footer-socials">
@@ -157,11 +130,9 @@
                 style="color:var(--text-secondary); text-decoration:none; font-size:0.8rem;">Repartidor</a>
         </div>
     </footer>
-
     <script src="script.js"></script>
     <script>
         lucide.createIcons();
     </script>
 </body>
-
 </html>
