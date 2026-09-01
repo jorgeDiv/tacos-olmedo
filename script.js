@@ -37,7 +37,7 @@ const defaultMenu = [
     {
         id: 4,
         title: "Torta de Carnitas",
-        desc: "Tradicional pan telera relleno de jugosas carnitas preparadas al momento.",
+        desc: "Tradicional pan Chapata casero, relleno de jugosas carnitas preparadas al momento acompañadas con sus salsas.",
         price: 60.00,
         category: "tortas",
         img: "assets/torta_carnitas.jpg"
