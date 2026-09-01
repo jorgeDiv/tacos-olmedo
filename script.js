@@ -53,11 +53,11 @@ const defaultMenu = [
     {
         id: 8,
         title: "Lo Quiero Kiliado (1kg)",
-        desc: "1 kg de carnitas estilo kiliado, preparadas con la receta especial de la casa.",
+        desc: "1 kg de carnitas estilo kiliado + tortillas + salsas, preparadas con la receta especial de la casa.",
         price: 400.00,
         category: "kiliado",
         badge: "Especial",
-        img: "assets/carnitas.jpg"
+        img: "assets/kiliado.png"
     }
 ];
 
