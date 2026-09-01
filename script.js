@@ -65,7 +65,7 @@ const defaultMenu = [
         desc: "Coca-Cola en botella de 600ml para acompañar tus alimentos.",
         price: 30.00,
         category: "bebidas",
-        img: "assets/refresco_355ml.png"
+        img: "assets/coca_cola_600ml.png"
     }
 ];
 
