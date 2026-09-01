@@ -34,6 +34,14 @@ const defaultMenu = [
         img: "assets/torta_carnitas.jpg"
     },
     {
+        id: 14,
+        title: "Torta de Surtido",
+        desc: "Tradicional pan telera relleno de surtido con cilantro, cebolla y salsa.",
+        price: 50.00,
+        category: "tortas",
+        img: "assets/torta_carnitas.jpg"
+    },
+    {
         id: 8,
         title: "Refresco",
         desc: "Bebida fría en lata o botella para acompañar tus alimentos.",
