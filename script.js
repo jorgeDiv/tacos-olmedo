@@ -370,7 +370,14 @@ document.getElementById('confirmLocationBtn').onclick = () => {
                 { headers: { 'Accept-Language': 'es' } }
             );
             const data = await res.json();
-            addrField.value = data.display_name || `Ubicación actual: ${lat}, ${lng}`;
+            const a = data.address || {};
+            const calle = a.road || a.pedestrian || a.street || '';
+            const numero = a.house_number || '';
+            const colonia = a.suburb || a.neighbourhood || a.city_district || '';
+            const ciudad = a.city || a.town || a.village || a.municipality || '';
+            const estado = a.state || '';
+            const partes = [calle && numero ? `${calle} ${numero}` : calle, colonia, ciudad, estado].filter(Boolean);
+            addrField.value = partes.join(', ') || data.display_name || `Ubicación actual: ${lat}, ${lng}`;
         } catch {
             addrField.value = `Ubicación actual: ${lat}, ${lng}`;
         }
