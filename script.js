@@ -31,7 +31,7 @@ const defaultMenu = [
         desc: "Tradicional pan telera relleno de jugosas carnitas preparadas al momento.",
         price: 50.00,
         category: "tortas",
-        img: "assets/carnitas.jpg"
+        img: "assets/torta_carnitas.jpg"
     },
     {
         id: 8,
