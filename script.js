@@ -56,7 +56,7 @@ const defaultMenu = [
         img: "assets/kiliado.png"
     },
     {
-        id: 10,
+        id: 12,
         title: "Lo Quiero Kiliado 1 1/2 Kg",
         desc: '1 1/2 Kg de carnitas "KILIADO" + tortillas + salsas, preparadas con la receta especial de la casa.',
         price: 600.00,
@@ -82,7 +82,7 @@ const defaultMenu = [
         img: "assets/refresco_355mL.png"
     },
     {
-        id: 9,
+        id: 10,
         title: "Coca-Cola 600mL",
         desc: "Coca-Cola en botella de 600mL para acompañar tus alimentos.",
         price: 30.00,
@@ -313,8 +313,13 @@ checkoutBtn.onclick = () => {
     const locMsg = address ? `📍 *Dirección de entrega:* ${address}` : "📍 *Dirección de entrega:* Sin especificar";
     const tacoMsg = `🌮 *Tipo de taco:* ${tacoType}`;
 
+    // Link de Google Maps para que el repartidor navegue hasta la dirección
+    const geoForMap = document.getElementById('deliveryAddress').value;
+    const mapsLink = geoForMap && geoForMap.includes('Ubicación actual')
+        ? `🗺️ *Ver en el mapa:* https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(geoForMap)}`
+        : `🗺️ *Ver en el mapa:* https://www.google.com/maps/search/${encodeURIComponent(address || geoForMap)}`;
 
-    const msg = encodeURIComponent(`¡Hola Tacos Olmedo!\n\n🛍️ *Nuevo Pedido:*\n${text}\n\n💰 *Total del carrito:* ${total}\n${payMsg}\n${tacoMsg}${kiliadoMsg ? '\n' + kiliadoMsg : ''}\n${customerMsg}\n${locMsg}`);
+    const msg = encodeURIComponent(`¡Hola Tacos Olmedo!\n\n🛍️ *Nuevo Pedido:*\n${text}\n\n💰 *Total del carrito:* ${total}\n${payMsg}\n${tacoMsg}\n${customerMsg}\n${locMsg}\n${mapsLink}`);
 
     // Save order for Admin/Repartidor
     const orders = JSON.parse(localStorage.getItem('tacosOrders')) || [];
@@ -348,17 +353,25 @@ checkoutBtn.onclick = () => {
     updateCartUI();
 };
 
-// Geolocalización nativa (sin mapa externo)
+// Geolocalización nativa con geocodificación inversa (Nominatim/OpenStreetMap)
 document.getElementById('confirmLocationBtn').onclick = () => {
     const addrField = document.getElementById('deliveryAddress');
     if (!navigator.geolocation) {
         alert("Geolocalización no soportada en este navegador.");
         return;
     }
-    navigator.geolocation.getCurrentPosition((pos) => {
+    addrField.value = "Obteniendo ubicación...";
+    navigator.geolocation.getCurrentPosition(async (pos) => {
         const lat = pos.coords.latitude.toFixed(6);
         const lng = pos.coords.longitude.toFixed(6);
-        if (!addrField.value.trim()) {
+        try {
+            const res = await fetch(
+                `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1`,
+                { headers: { 'Accept-Language': 'es' } }
+            );
+            const data = await res.json();
+            addrField.value = data.display_name || `Ubicación actual: ${lat}, ${lng}`;
+        } catch {
             addrField.value = `Ubicación actual: ${lat}, ${lng}`;
         }
     }, () => {
