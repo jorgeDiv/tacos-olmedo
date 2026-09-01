@@ -507,31 +507,24 @@ body {
 .locate-btn:hover { background: var(--accent-glow); }
 .locate-btn i { width: 14px; height: 14px; }
 
-/* Método de pago */
-.pay-grid { display: flex; flex-wrap: wrap; gap: 0.5rem; }
-.pay-opt { position: relative; cursor: pointer; flex: 1 1 auto; }
-.pay-opt input { position: absolute; opacity: 0; pointer-events: none; }
-.pay-opt span {
+/* Método de pago - Botón contraentrega */
+.pay-contraentrega-btn {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 0.4rem;
-    padding: 0.6rem 0.5rem;
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: var(--text-secondary);
-    background: var(--glass);
-    border: 1px solid var(--glass-border);
-    border-radius: var(--radius-md);
-    transition: all 0.2s ease;
-}
-.pay-opt span i { width: 15px; height: 15px; }
-.pay-opt input:checked + span {
+    gap: 0.5rem;
+    width: 100%;
+    padding: 0.75rem 1rem;
+    font-size: 0.95rem;
+    font-weight: 700;
     color: #fff;
     background: var(--accent);
-    border-color: var(--accent);
+    border: 1px solid var(--accent);
+    border-radius: var(--radius-md);
+    cursor: default;
     box-shadow: 0 4px 14px var(--accent-glow);
 }
+.pay-contraentrega-btn i { width: 18px; height: 18px; }
 
 /* Pie fijo: total + botón */
 .cart-foot {

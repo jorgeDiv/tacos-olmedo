@@ -233,34 +233,11 @@ catLinks.forEach(link => {
     };
 });
 
-// Configuracion de Mercado Pago (editable via localStorage 'mpLink')
-const MP_LINK_DEFAULT = 'link.mercadopago.com.mx/tacosolmedo';
-function getMpLink() {
-    return localStorage.getItem('mpLink') || MP_LINK_DEFAULT;
 }
 function getMpHref() {
-    const l = getMpLink();
     return l.startsWith('http') ? l : 'https://' + l;
 }
 
-// Mostrar/ocultar el link de Mercado Pago segun el metodo de pago
-function refreshMpLinkBox() {
-    const box = document.getElementById('mpLinkBox');
-    if (!box) return;
-    const payment = document.querySelector('input[name="payment"]:checked');
-    const isMp = payment && payment.value === 'Mercado Pago';
-    box.style.display = isMp ? 'block' : 'none';
-    if (isMp) {
-        const a = document.getElementById('mpLink');
-        a.href = getMpLink();
-        a.textContent = getMpLink();
-    }
-}
-
-// Update notice when payment method changes
-document.querySelectorAll('input[name="payment"]').forEach(input => {
-    input.onchange = () => { refreshMpLinkBox(); updateCartUI(); };
-});
 
 window.onscroll = () => {
     const btt = document.getElementById('backToTop');
@@ -273,7 +250,7 @@ document.getElementById('backToTop').onclick = () => window.scrollTo(0, 0);
 checkoutBtn.onclick = () => {
     const text = cart.map(i => `${i.title} (x${i.quantity})`).join('\n');
     const total = totalPriceElement.innerText;
-    const payment = document.querySelector('input[name="payment"]:checked').value;
+    const payment = document.querySelector('input[name="payment"]').value;
     const clientName = document.getElementById('clientName').value;
     const clientPhone = document.getElementById('clientPhone').value;
     const address = document.getElementById('deliveryAddress').value;
@@ -285,9 +262,7 @@ checkoutBtn.onclick = () => {
     }
 
     let payMsg = "";
-    if (payment === 'Efectivo') payMsg = "💵 *Pago:* Efectivo";
-    else if (payment === 'Transferencia') payMsg = "💳 *Pago:* Transferencia";
-    else if (payment === 'Mercado Pago') payMsg = `💳 *Pago:* Mercado Pago\n🔗 *Paga aquí:* ${getMpLink()}`;
+    let payMsg = "💵 *Pago:* Efectivo (Contraentrega)";
 
     const customerMsg = `👤 *Cliente:* ${clientName}\n📞 *Teléfono:* ${clientPhone}`;
     const locMsg = address ? `📍 *Dirección de entrega:* ${address}` : "📍 *Dirección de entrega:* Sin especificar";

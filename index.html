@@ -108,23 +108,10 @@
 
                     <div class="field">
                         <label>Método de pago</label>
-                        <div class="pay-grid">
-                            <label class="pay-opt">
-                                <input type="radio" name="payment" value="Efectivo" checked>
-                                <span><i data-lucide="banknote"></i> Efectivo</span>
-                            </label>
-                            <label class="pay-opt">
-                                <input type="radio" name="payment" value="Transferencia">
-                                <span><i data-lucide="landmark"></i> Transferencia</span>
-                            </label>
-                            <label class="pay-opt">
-                                <input type="radio" name="payment" value="Mercado Pago">
-                                <span><i data-lucide="credit-card"></i> Mercado Pago</span>
-                            </label>
-                        </div>
-                        <div id="mpLinkBox" style="display:none; margin-top:0.6rem; padding:0.6rem 0.75rem; background:rgba(255,77,0,0.08); border:1px solid rgba(255,77,0,0.3); border-radius:10px; font-size:0.8rem; color:var(--text-secondary);">
-                            Paga tu pedido aquí: <a id="mpLink" href="#" target="_blank" rel="noopener" style="color:var(--accent); font-weight:600; word-break:break-all;">link.mercadopago.com.mx/tacosolmedo</a>
-                        </div>
+                        <button type="button" class="pay-contraentrega-btn" id="payContraentregaBtn">
+                            <i data-lucide="banknote"></i> Pago contraentrega
+                        </button>
+                        <input type="hidden" name="payment" value="Efectivo (Contraentrega)">
                     </div>
                 </div>
             </div>
