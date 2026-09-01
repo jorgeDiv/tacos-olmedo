@@ -34,14 +34,6 @@ const defaultMenu = [
         img: "assets/torta_carnitas.jpg"
     },
     {
-        id: 5,
-        title: "Torta de Surtido",
-        desc: "Tradicional pan telera relleno de surtido con cilantro, cebolla y salsa.",
-        price: 60.00,
-        category: "tortas",
-        img: "assets/torta_carnitas.jpg"
-    },
-    {
         id: 6,
         title: "Refresco",
         desc: "Bebida fría en lata o botella para acompañar tus alimentos.",
@@ -57,6 +49,15 @@ const defaultMenu = [
         category: "bebidas",
         badge: "⭐ Favorito",
         img: "assets/drinks.jpg"
+    },
+    {
+        id: 8,
+        title: "Lo Quiero Kiliado (1kg)",
+        desc: "1 kg de carnitas estilo kiliado, preparadas con la receta especial de la casa.",
+        price: 400.00,
+        category: "kiliado",
+        badge: "Especial",
+        img: "assets/carnitas.jpg"
     }
 ];
 
@@ -206,6 +207,12 @@ catLinks.forEach(link => {
         catLinks.forEach(l => l.classList.remove('active'));
         e.target.classList.add('active');
         renderMenu(e.target.dataset.category);
+        
+        // Show/hide kiliado field
+        const kiliadoField = document.getElementById('kiliadoField');
+        if (kiliadoField) {
+            kiliadoField.style.display = e.target.dataset.category === 'kiliado' ? 'block' : 'none';
+        }
     };
 });
 
@@ -223,6 +230,7 @@ checkoutBtn.onclick = () => {
     const total = totalPriceElement.innerText;
     const payment = document.querySelector('input[name="payment"]').value;
     const tacoType = document.querySelector('input[name="tacoType"]:checked') ? document.querySelector('input[name="tacoType"]:checked').value : 'Surtido';
+    const kiliadoSize = document.querySelector('input[name="kiliadoSize"]:checked') ? document.querySelector('input[name="kiliadoSize"]:checked').value : '1kg';
     const clientName = document.getElementById('clientName').value;
     const clientPhone = document.getElementById('clientPhone').value;
     const address = document.getElementById('deliveryAddress').value;
@@ -238,8 +246,9 @@ checkoutBtn.onclick = () => {
     const customerMsg = `👤 *Cliente:* ${clientName}\n📞 *Teléfono:* ${clientPhone}`;
     const locMsg = address ? `📍 *Dirección de entrega:* ${address}` : "📍 *Dirección de entrega:* Sin especificar";
     const tacoMsg = `🌮 *Tipo de taco:* ${tacoType}`;
+    const kiliadoMsg = cart.some(i => i.category === 'kiliado') ? `🥩 *Kiliado:* ${kiliadoSize}` : '';
 
-    const msg = encodeURIComponent(`¡Hola Tacos Olmedo!\n\n🛍️ *Nuevo Pedido:*\n${text}\n\n💰 *Total del carrito:* ${total}\n${payMsg}\n${tacoMsg}\n${customerMsg}\n${locMsg}`);
+    const msg = encodeURIComponent(`¡Hola Tacos Olmedo!\n\n🛍️ *Nuevo Pedido:*\n${text}\n\n💰 *Total del carrito:* ${total}\n${payMsg}\n${tacoMsg}${kiliadoMsg ? '\n' + kiliadoMsg : ''}\n${customerMsg}\n${locMsg}`);
 
     // Save order for Admin/Repartidor
     const orders = JSON.parse(localStorage.getItem('tacosOrders')) || [];
@@ -251,6 +260,7 @@ checkoutBtn.onclick = () => {
         customerPhone: clientPhone,
         paymentMethod: payment,
         tacoType: tacoType,
+        kiliadoSize: kiliadoSize,
         address: address,
         status: 'Pendiente',
         date: new Date().toLocaleString()
