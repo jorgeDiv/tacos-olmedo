@@ -92,7 +92,7 @@ const defaultMenu = [
     {
         id: 6,
         title: "Refresco 355mL",
-        desc: "Refreso en su presentacion de 355mL para acompañar tus alimentos.",
+        desc: "Refreso en su presentación de 355mL para acompañar tus alimentos.",
         price: 25.00,
         category: "bebidas",
         img: "assets/refresco_355mL.png"

@@ -114,9 +114,11 @@
 
                     <div class="field">
                         <label>Método de pago</label>
-                        <button type="button" class="pay-contraentrega-btn" id="payContraentregaBtn">
-                            <i data-lucide="banknote"></i> Pago contraentrega
-                        </button>
+                        <div class="pay-toggle" id="payToggle">
+                            <span class="pay-toggle-label">Pago contraentrega</span>
+                            <span class="pay-toggle-switch"></span>
+                            <span class="pay-toggle-status">Activado</span>
+                        </div>
                         <input type="hidden" name="payment" value="Efectivo (Contraentrega)">
                     </div>
                 </div>
