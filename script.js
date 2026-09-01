@@ -137,6 +137,16 @@ function addToCart(id) {
     showCart();
 }
 
+function getKiliadoPrice(size) {
+    const prices = {
+        '500g': 200,
+        '1kg': 400,
+        '2kg': 800,
+        '3kg': 1200
+    };
+    return prices[size] || 400;
+}
+
 function updateCartUI() {
     cartItemsContainer.innerHTML = '';
     const notice = document.querySelector('.shipping-notice');
@@ -158,7 +168,7 @@ function updateCartUI() {
                 <div style="display:flex;justify-content:space-between;align-items:center;gap:0.5rem">
                     <div style="flex:1">
                         <h4 style="font-family:var(--font-header)">${item.title}</h4>
-                        <span style="color:var(--accent);font-weight:700">$${(item.price * item.quantity).toFixed(2)}</span>
+                        <span style="color:var(--accent);font-weight:700">$${item.category === 'kiliado' ? (getKiliadoPrice(kiliadoSize) * item.quantity).toFixed(2) : (item.price * item.quantity).toFixed(2)}</span>
                     </div>
                     <div class="qty-controls" style="display:flex;align-items:center;gap:0.25rem">
                         <button class="qty-btn qty-minus" data-id="${item.id}" data-action="decrease" style="width:28px;height:28px;border-radius:50%;border:1px solid var(--glass-border);background:var(--glass);color:var(--text);cursor:pointer;display:flex;align-items:center;justify-content:center;font-weight:700">−</button>
@@ -175,7 +185,13 @@ function updateCartUI() {
     }
 
     const count = cart.reduce((acc, cur) => acc + cur.quantity, 0);
-    let total = cart.reduce((acc, cur) => acc + (cur.price * cur.quantity), 0);
+    let kiliadoSize = document.querySelector('input[name="kiliadoSize"]:checked') ? document.querySelector('input[name="kiliadoSize"]:checked').value : '1kg';
+    let total = cart.reduce((acc, cur) => {
+        if (cur.category === 'kiliado') {
+            return acc + (getKiliadoPrice(kiliadoSize) * cur.quantity);
+        }
+        return acc + (cur.price * cur.quantity);
+    }, 0);
 
     // Cargo por envío: $20 si el subtotal es <= $300, gratis si es mayor
     if (total > 0 && total <= 300) {
