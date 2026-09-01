@@ -53,19 +53,19 @@ const defaultMenu = [
     },
     {
         id: 6,
-        title: "Refresco 355ml",
-        desc: "Refreso en su presentacion de 355ml para acompañar tus alimentos.",
+        title: "Refresco 355mL",
+        desc: "Refreso en su presentacion de 355mL para acompañar tus alimentos.",
         price: 25.00,
         category: "bebidas",
-        img: "assets/refresco_355ml.png"
+        img: "assets/refresco_355mL.png"
     },
     {
         id: 9,
-        title: "Coca-Cola 600ml",
-        desc: "Coca-Cola en botella de 600ml para acompañar tus alimentos.",
+        title: "Coca-Cola 600mL",
+        desc: "Coca-Cola en botella de 600mL para acompañar tus alimentos.",
         price: 30.00,
         category: "bebidas",
-        img: "assets/coca_cola_600ml.png"
+        img: "assets/coca_cola_600mL.png"
     }
 ];
 
