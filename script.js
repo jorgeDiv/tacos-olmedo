@@ -39,7 +39,7 @@ const defaultMenu = [
         desc: "Bebida fría en lata de 355ml para acompañar tus alimentos.",
         price: 25.00,
         category: "bebidas",
-        img: "assets/refresco.jpg"
+        img: "assets/refresco_355ml.png"
     },
     {
         id: 7,
@@ -49,6 +49,14 @@ const defaultMenu = [
         category: "bebidas",
         badge: "⭐ Favorito",
         img: "assets/drinks.jpg"
+    },
+    {
+        id: 9,
+        title: "Coca-Cola 600ml",
+        desc: "Coca-Cola en botella de 600ml para acompañar tus alimentos.",
+        price: 30.00,
+        category: "bebidas",
+        img: "assets/refresco_355ml.png"
     },
     {
         id: 8,
