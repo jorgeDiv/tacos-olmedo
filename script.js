@@ -1,31 +1,56 @@
 const defaultMenu = [
     {
         id: 1,
-        title: "Orden de 3 tacos",
-        desc: "Orden pequeña de tus tacos favoritos con todo.",
-        price: 45.00,
-        category: "tacos",
-        img: "assets/tacos.jpg"
-    },
-    {
-        id: 2,
-        title: "Orden de 5 tacos",
-        desc: "La orden clásica, deliciosos tacos con cilantro, cebolla y tu salsa favorita.",
-        price: 75.00,
-        category: "tacos",
-        badge: "Popular",
-        img: "assets/tacos.jpg"
-    },
-    {
-        id: 3,
-        title: "Orden de 7 tacos",
-        desc: "Para los más hambrientos. Excelente porción de tacos bien servidos.",
+        title: "5 tacos surtido",
+        desc: "5 tacos de surtido con cilantro, cebolla y tu salsa favorita.",
         price: 100.00,
         category: "tacos",
         img: "assets/tacos.jpg"
     },
     {
+        id: 2,
+        title: "5 tacos carnitas",
+        desc: "5 tacos de carnitas jugosas, preparadas al momento con cilantro, cebolla y salsa.",
+        price: 100.00,
+        category: "tacos",
+        img: "assets/carnitas.jpg"
+    },
+    {
+        id: 3,
+        title: "6 tacos surtido",
+        desc: "6 tacos de surtido con cilantro, cebolla y tu salsa favorita.",
+        price: 120.00,
+        category: "tacos",
+        badge: "Popular",
+        img: "assets/tacos.jpg"
+    },
+    {
         id: 4,
+        title: "6 tacos carnitas",
+        desc: "6 tacos de carnitas jugosas, preparadas al momento con cilantro, cebolla y salsa.",
+        price: 120.00,
+        category: "tacos",
+        img: "assets/carnitas.jpg"
+    },
+    {
+        id: 5,
+        title: "8 tacos surtido",
+        desc: "8 tacos de surtido con cilantro, cebolla y tu salsa favorita.",
+        price: 160.00,
+        category: "tacos",
+        badge: "Familiar",
+        img: "assets/tacos.jpg"
+    },
+    {
+        id: 6,
+        title: "8 tacos carnitas",
+        desc: "8 tacos de carnitas jugosas, preparadas al momento con cilantro, cebolla y salsa.",
+        price: 160.00,
+        category: "tacos",
+        img: "assets/carnitas.jpg"
+    },
+    {
+        id: 7,
         title: "Torta de Carnitas",
         desc: "Tradicional pan telera relleno de jugosas carnitas preparadas al momento.",
         price: 50.00,
@@ -33,7 +58,7 @@ const defaultMenu = [
         img: "assets/carnitas.jpg"
     },
     {
-        id: 5,
+        id: 8,
         title: "Refresco",
         desc: "Bebida fría en lata o botella para acompañar tus alimentos.",
         price: 20.00,
@@ -41,7 +66,7 @@ const defaultMenu = [
         img: "assets/refresco.jpg"
     },
     {
-        id: 6,
+        id: 9,
         title: "Agua Fresca",
         desc: "Agua fresca de sabor natural, la mejor opción para refrescarte.",
         price: 25.00,
@@ -50,37 +75,37 @@ const defaultMenu = [
         img: "assets/drinks.jpg"
     },
     {
-        id: 7,
+        id: 10,
         title: "Combo: 5 Tacos + Agua Fresca",
-        desc: "Orden clásica de 5 tacos de surtido con tu agua fresca favorita.",
-        price: 90.00,
+        desc: "5 tacos de surtido con tu agua fresca favorita.",
+        price: 115.00,
         category: "combos",
         badge: "Especial",
         img: "assets/tacos.jpg"
     },
     {
-        id: 8,
+        id: 11,
         title: "Combo: Torta + Agua Fresca",
         desc: "Deliciosa torta de carnitas acompañada de una fresca agua de sabor.",
         price: 70.00,
         category: "combos",
-        img: "assets/tacos.jpg"
+        img: "assets/carnitas.jpg"
     },
     {
-        id: 9,
-        title: "Combo: 5 Tacos + Refresco de 350 ml",
-        desc: "La orden perfecta: 5 deliciosos tacos de surtido con un refresco frío de 350 ml.",
-        price: 90.00,
+        id: 12,
+        title: "Combo: 5 Tacos + Refresco",
+        desc: "5 tacos de surtido con un refresco frío de 350 ml.",
+        price: 115.00,
         category: "combos",
         img: "assets/tacos.jpg"
     },
     {
-        id: 10,
-        title: "Combo: Torta + Refresco de 350 ml",
-        desc: "Para el antojo: Deliciosa torta de carnitas acompañada de un refresco de 350 ml.",
+        id: 13,
+        title: "Combo: Torta + Refresco",
+        desc: "Deliciosa torta de carnitas acompañada de un refresco de 350 ml.",
         price: 70.00,
         category: "combos",
-        img: "assets/tacos.jpg"
+        img: "assets/carnitas.jpg"
     }
 ];
 
