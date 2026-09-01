@@ -1,16 +1,25 @@
 const defaultMenu = [
     {
+        id: 8,
+        title: "Lo Quiero Kiliado (1kg)",
+        desc: "1 kg de carnitas estilo kiliado + tortillas + salsas, preparadas con la receta especial de la casa.",
+        price: 400.00,
+        category: "kiliado",
+        badge: "Especial",
+        img: "assets/kiliado.png"
+    },
+    {
         id: 1,
-        title: "5 tacos",
-        desc: "5 tacos con cilantro, cebolla y tu salsa favorita.",
+        title: "5 tacos de carnitas",
+        desc: "5 tacos de carnitas con cilantro, cebolla y tu salsa favorita.",
         price: 100.00,
         category: "tacos",
         img: "assets/carnitas.jpg"
     },
     {
         id: 2,
-        title: "6 tacos",
-        desc: "6 tacos con cilantro, cebolla y tu salsa favorita.",
+        title: "6 tacos de carnitas",
+        desc: "6 tacos de carnitas con cilantro, cebolla y tu salsa favorita.",
         price: 120.00,
         category: "tacos",
         badge: "Popular",
@@ -18,8 +27,8 @@ const defaultMenu = [
     },
     {
         id: 3,
-        title: "8 tacos",
-        desc: "8 tacos con cilantro, cebolla y tu salsa favorita.",
+        title: "8 tacos de carnitas",
+        desc: "8 tacos de carnitas con cilantro, cebolla y tu salsa favorita.",
         price: 160.00,
         category: "tacos",
         badge: "Familiar",
@@ -57,15 +66,6 @@ const defaultMenu = [
         price: 30.00,
         category: "bebidas",
         img: "assets/refresco_355ml.png"
-    },
-    {
-        id: 8,
-        title: "Lo Quiero Kiliado (1kg)",
-        desc: "1 kg de carnitas estilo kiliado + tortillas + salsas, preparadas con la receta especial de la casa.",
-        price: 400.00,
-        category: "kiliado",
-        badge: "Especial",
-        img: "assets/kiliado.png"
     }
 ];
 
