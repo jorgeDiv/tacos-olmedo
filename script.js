@@ -18,6 +18,14 @@ const defaultMenu = [
     },
     {
         id: 10,
+        title: "Lo Quiero Kiliado 1 1/2 Kg",
+        desc: '1 1/2 Kg de carnitas "KILIADO" + tortillas + salsas, preparadas con la receta especial de la casa.',
+        price: 600.00,
+        category: "kiliado",
+        img: "assets/kiliado.png"
+    },
+    {
+        id: 11,
         title: "Lo Quiero Kiliado 2kg",
         desc: '2kg de carnitas "KILIADO" + tortillas + salsas, preparadas con la receta especial de la casa.',
         price: 800.00,
@@ -25,7 +33,7 @@ const defaultMenu = [
         img: "assets/kiliado.png"
     },
     {
-        id: 11,
+        id: 12,
         title: "Lo Quiero Kiliado 3kg",
         desc: '3kg de carnitas "KILIADO" + tortillas + salsas, preparadas con la receta especial de la casa.',
         price: 1200.00,
