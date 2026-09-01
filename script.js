@@ -63,23 +63,7 @@ const defaultMenu = [
         category: "kiliado",
         img: "assets/kiliado.png"
     },
-    {
-        id: 11,
-        title: "Lo Quiero Kiliado 2kg",
-        desc: '2kg de carnitas "KILIADO" + tortillas + salsas, preparadas con la receta especial de la casa.',
-        price: 800.00,
-        category: "kiliado",
-        img: "assets/kiliado.png"
-    },
-    {
-        id: 12,
-        title: "Lo Quiero Kiliado 3kg",
-        desc: '3kg de carnitas "KILIADO" + tortillas + salsas, preparadas con la receta especial de la casa.',
-        price: 1200.00,
-        category: "kiliado",
-        badge: "Familiar",
-        img: "assets/kiliado.png"
-    },
+
     {
         id: 7,
         title: "Agua Fresca",
