@@ -88,24 +88,6 @@
                         <span><b>Cargo por envío $20.00 MXN</b>, Envío sin costo solo en compras mayores a <b>$300.00 MXN</b>.</span>
                     </p>
 
-                    <div class="field">
-                        <label for="clientName">Nombre</label>
-                        <input type="text" id="clientName" placeholder="Tu nombre">
-                    </div>
-
-                    <div class="field">
-                        <label for="clientPhone">Teléfono</label>
-                        <input type="tel" id="clientPhone" placeholder="10 dígitos">
-                    </div>
-
-                    <div class="field">
-                        <label for="deliveryAddress">Dirección de entrega</label>
-                        <textarea id="deliveryAddress" rows="2" placeholder="Calle, Número, Colonia, Referencias"></textarea>
-                        <button type="button" class="locate-btn" id="confirmLocationBtn">
-                            <i data-lucide="map-pin"></i> Usar mi ubicación
-                        </button>
-                    </div>
-
                     <div class="field" id="kiliadoField" style="display:none;">
                         <label>Cantidad de Kiliado</label>
                         <div class="pay-grid">
@@ -129,22 +111,26 @@
                     </div>
 
                     <div class="field">
-                        <label>Tipo de taco</label>
-                        <div class="pay-grid">
-                            <label class="pay-opt">
-                                <input type="radio" name="tacoType" value="Surtido" checked>
-                                <span>Surtido</span>
-                            </label>
-                            <label class="pay-opt">
-                                <input type="radio" name="tacoType" value="Carnitas">
-                                <span>Carnitas</span>
-                            </label>
-                            <label class="pay-opt">
-                                <input type="radio" name="tacoType" value="Cuerito">
-                                <span>Cuerito</span>
-                            </label>
-                        </div>
+                        <label for="clientName">Nombre</label>
+                        <input type="text" id="clientName" placeholder="Tu nombre">
                     </div>
+
+                    <div class="field">
+                        <label for="clientPhone">Teléfono</label>
+                        <input type="tel" id="clientPhone" placeholder="10 dígitos">
+                    </div>
+
+                    <div class="field">
+                        <label for="deliveryAddress">Dirección de entrega</label>
+                        <textarea id="deliveryAddress" rows="2" placeholder="Calle, Número, Colonia, Referencias"></textarea>
+                        <button type="button" class="locate-btn" id="confirmLocationBtn">
+                            <i data-lucide="map-pin"></i> Usar mi ubicación
+                        </button>
+                    </div>
+
+                    
+
+                    
 
                     <div class="field">
                         <label>Método de pago</label>

@@ -45,7 +45,7 @@ const defaultMenu = [
     {
         id: 7,
         title: "Agua Fresca",
-        desc: "Agua fresca de sabor natural, la mejor opción para refrescarte.",
+        desc: "Agua fresca (400 mL) de sabor natural, la mejor opción para refrescarte.",
         price: 25.00,
         category: "bebidas",
         badge: "⭐ Favorito",
