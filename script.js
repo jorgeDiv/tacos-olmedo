@@ -29,7 +29,7 @@ const defaultMenu = [
         id: 7,
         title: "Torta de Carnitas",
         desc: "Tradicional pan telera relleno de jugosas carnitas preparadas al momento.",
-        price: 50.00,
+        price: 60.00,
         category: "tortas",
         img: "assets/torta_carnitas.jpg"
     },
@@ -37,7 +37,7 @@ const defaultMenu = [
         id: 14,
         title: "Torta de Surtido",
         desc: "Tradicional pan telera relleno de surtido con cilantro, cebolla y salsa.",
-        price: 50.00,
+        price: 60.00,
         category: "tortas",
         img: "assets/torta_carnitas.jpg"
     },
@@ -57,10 +57,7 @@ const defaultMenu = [
         category: "bebidas",
         badge: "⭐ Favorito",
         img: "assets/drinks.jpg"
-    },
-    {
-        id: 10,
-        title: "Combo: 5 Tacos + Agua Fresca",
+    }
         desc: "5 tacos de surtido con tu agua fresca favorita.",
         price: 115.00,
         category: "combos",
