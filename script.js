@@ -155,10 +155,15 @@ function updateCartUI() {
             el.style.padding = '1rem 0';
             el.style.borderBottom = '1px solid rgba(255,255,255,0.05)';
             el.innerHTML = `
-                <div style="display:flex;justify-content:space-between;align-items:center">
-                    <div>
-                        <h4 style="font-family:var(--font-header)">${item.title} x${item.quantity}</h4>
+                <div style="display:flex;justify-content:space-between;align-items:center;gap:0.5rem">
+                    <div style="flex:1">
+                        <h4 style="font-family:var(--font-header)">${item.title}</h4>
                         <span style="color:var(--accent);font-weight:700">$${(item.price * item.quantity).toFixed(2)}</span>
+                    </div>
+                    <div class="qty-controls" style="display:flex;align-items:center;gap:0.25rem">
+                        <button class="qty-btn qty-minus" data-id="${item.id}" data-action="decrease" style="width:28px;height:28px;border-radius:50%;border:1px solid var(--glass-border);background:var(--glass);color:var(--text);cursor:pointer;display:flex;align-items:center;justify-content:center;font-weight:700">−</button>
+                        <span class="qty-num" style="min-width:24px;text-align:center;font-weight:700">${item.quantity}</span>
+                        <button class="qty-btn qty-plus" data-id="${item.id}" data-action="increase" style="width:28px;height:28px;border-radius:50%;border:1px solid var(--accent);background:var(--accent);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-weight:700">+</button>
                     </div>
                     <button class="remove-btn" data-id="${item.id}" data-action="remove" style="background:none;border:none;color:var(--text-secondary);cursor:pointer">
                          <i data-lucide="trash-2" style="width:18px;"></i>
@@ -202,8 +207,33 @@ menuGrid.addEventListener('click', (e) => {
     if (btn) addToCart(Number(btn.dataset.id));
 });
 cartItemsContainer.addEventListener('click', (e) => {
-    const btn = e.target.closest('[data-action="remove"]');
-    if (btn) removeFromCart(Number(btn.dataset.id));
+    const removeBtn = e.target.closest('[data-action="remove"]');
+    if (removeBtn) {
+        removeFromCart(Number(removeBtn.dataset.id));
+        return;
+    }
+    
+    const incBtn = e.target.closest('[data-action="increase"]');
+    if (incBtn) {
+        const item = cart.find(i => i.id === Number(incBtn.dataset.id));
+        if (item) item.quantity += 1;
+        updateCartUI();
+        return;
+    }
+    
+    const decBtn = e.target.closest('[data-action="decrease"]');
+    if (decBtn) {
+        const item = cart.find(i => i.id === Number(decBtn.dataset.id));
+        if (item) {
+            item.quantity -= 1;
+            if (item.quantity <= 0) {
+                removeFromCart(item.id);
+            } else {
+                updateCartUI();
+            }
+        }
+        return;
+    }
 });
 
 // Events
