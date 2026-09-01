@@ -1,11 +1,36 @@
 const defaultMenu = [
     {
         id: 8,
+        title: "Lo Quiero Kiliado 500g",
+        desc: '500g de carnitas "KILIADO" + tortillas + salsas, preparadas con la receta especial de la casa.',
+        price: 200.00,
+        category: "kiliado",
+        img: "assets/kiliado.png"
+    },
+    {
+        id: 9,
         title: "Lo Quiero Kiliado 1kg",
-        desc: 'elige entre 500g, 1Kg, 2Kg, 3Kg, de carnitas "KILIADO" + tortillas + salsas, preparadas con la receta especial de la casa.',
+        desc: '1kg de carnitas "KILIADO" + tortillas + salsas, preparadas con la receta especial de la casa.',
         price: 400.00,
         category: "kiliado",
-        badge: "Especial",
+        badge: "Popular",
+        img: "assets/kiliado.png"
+    },
+    {
+        id: 10,
+        title: "Lo Quiero Kiliado 2kg",
+        desc: '2kg de carnitas "KILIADO" + tortillas + salsas, preparadas con la receta especial de la casa.',
+        price: 800.00,
+        category: "kiliado",
+        img: "assets/kiliado.png"
+    },
+    {
+        id: 11,
+        title: "Lo Quiero Kiliado 3kg",
+        desc: '3kg de carnitas "KILIADO" + tortillas + salsas, preparadas con la receta especial de la casa.',
+        price: 1200.00,
+        category: "kiliado",
+        badge: "Familiar",
         img: "assets/kiliado.png"
     },
     {
@@ -137,16 +162,6 @@ function addToCart(id) {
     showCart();
 }
 
-function getKiliadoPrice(size) {
-    const prices = {
-        '500g': 200,
-        '1kg': 400,
-        '2kg': 800,
-        '3kg': 1200
-    };
-    return prices[size] || 400;
-}
-
 function updateCartUI() {
     cartItemsContainer.innerHTML = '';
     const notice = document.querySelector('.shipping-notice');
@@ -159,9 +174,6 @@ function updateCartUI() {
         checkoutBtn.disabled = false;
         if (notice) notice.style.display = 'flex';
 
-        // Get kiliado size before rendering items
-        let kiliadoSize = document.querySelector('input[name="kiliadoSize"]:checked') ? document.querySelector('input[name="kiliadoSize"]:checked').value : '1kg';
-
         cart.forEach(item => {
             const el = document.createElement('div');
             el.className = 'cart-item-row';
@@ -171,7 +183,7 @@ function updateCartUI() {
                 <div style="display:flex;justify-content:space-between;align-items:center;gap:0.5rem">
                     <div style="flex:1">
                         <h4 style="font-family:var(--font-header)">${item.title}</h4>
-                        <span style="color:var(--accent);font-weight:700">$${item.category === 'kiliado' ? (getKiliadoPrice(kiliadoSize) * item.quantity).toFixed(2) : (item.price * item.quantity).toFixed(2)}</span>
+                        <span style="color:var(--accent);font-weight:700">$${(item.price * item.quantity).toFixed(2)}</span>
                     </div>
                     <div class="qty-controls" style="display:flex;align-items:center;gap:0.25rem">
                         <button class="qty-btn qty-minus" data-id="${item.id}" data-action="decrease" style="width:28px;height:28px;border-radius:50%;border:1px solid var(--glass-border);background:var(--glass);color:var(--text);cursor:pointer;display:flex;align-items:center;justify-content:center;font-weight:700">−</button>
@@ -188,12 +200,7 @@ function updateCartUI() {
     }
 
     const count = cart.reduce((acc, cur) => acc + cur.quantity, 0);
-    let total = cart.reduce((acc, cur) => {
-        if (cur.category === 'kiliado') {
-            return acc + (getKiliadoPrice(kiliadoSize) * cur.quantity);
-        }
-        return acc + (cur.price * cur.quantity);
-    }, 0);
+    let total = cart.reduce((acc, cur) => acc + (cur.price * cur.quantity), 0);
 
     // Cargo por envío: $20 si el subtotal es <= $300, gratis si es mayor
     if (total > 0 && total <= 300) {
@@ -236,6 +243,7 @@ cartItemsContainer.addEventListener('click', (e) => {
         const item = cart.find(i => i.id === Number(incBtn.dataset.id));
         if (item) item.quantity += 1;
         updateCartUI();
+        showCart();
         return;
     }
     
@@ -248,6 +256,7 @@ cartItemsContainer.addEventListener('click', (e) => {
                 removeFromCart(item.id);
             } else {
                 updateCartUI();
+                showCart();
             }
         }
         return;
@@ -264,11 +273,7 @@ catLinks.forEach(link => {
         e.target.classList.add('active');
         renderMenu(e.target.dataset.category);
         
-        // Show/hide kiliado field
-        const kiliadoField = document.getElementById('kiliadoField');
-        if (kiliadoField) {
-            kiliadoField.style.display = e.target.dataset.category === 'kiliado' ? 'block' : 'none';
-        }
+
     };
 });
 
@@ -286,7 +291,7 @@ checkoutBtn.onclick = () => {
     const total = totalPriceElement.innerText;
     const payment = document.querySelector('input[name="payment"]').value;
     const tacoType = document.querySelector('input[name="tacoType"]:checked') ? document.querySelector('input[name="tacoType"]:checked').value : 'Surtido';
-    const kiliadoSize = document.querySelector('input[name="kiliadoSize"]:checked') ? document.querySelector('input[name="kiliadoSize"]:checked').value : '1kg';
+
     const clientName = document.getElementById('clientName').value;
     const clientPhone = document.getElementById('clientPhone').value;
     const address = document.getElementById('deliveryAddress').value;
@@ -302,7 +307,7 @@ checkoutBtn.onclick = () => {
     const customerMsg = `👤 *Cliente:* ${clientName}\n📞 *Teléfono:* ${clientPhone}`;
     const locMsg = address ? `📍 *Dirección de entrega:* ${address}` : "📍 *Dirección de entrega:* Sin especificar";
     const tacoMsg = `🌮 *Tipo de taco:* ${tacoType}`;
-    const kiliadoMsg = cart.some(i => i.category === 'kiliado') ? `🥩 *Kiliado:* ${kiliadoSize}` : '';
+
 
     const msg = encodeURIComponent(`¡Hola Tacos Olmedo!\n\n🛍️ *Nuevo Pedido:*\n${text}\n\n💰 *Total del carrito:* ${total}\n${payMsg}\n${tacoMsg}${kiliadoMsg ? '\n' + kiliadoMsg : ''}\n${customerMsg}\n${locMsg}`);
 
@@ -316,7 +321,7 @@ checkoutBtn.onclick = () => {
         customerPhone: clientPhone,
         paymentMethod: payment,
         tacoType: tacoType,
-        kiliadoSize: kiliadoSize,
+
         address: address,
         status: 'Pendiente',
         date: new Date().toLocaleString()
