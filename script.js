@@ -43,14 +43,6 @@ const defaultMenu = [
         img: "assets/torta_carnitas.jpg"
     },
     {
-        id: 6,
-        title: "Refresco 355ml",
-        desc: "Bebida fría en lata de 355ml para acompañar tus alimentos.",
-        price: 25.00,
-        category: "bebidas",
-        img: "assets/refresco_355ml.png"
-    },
-    {
         id: 7,
         title: "Agua Fresca",
         desc: "Agua fresca de sabor natural, la mejor opción para refrescarte.",
@@ -58,6 +50,14 @@ const defaultMenu = [
         category: "bebidas",
         badge: "⭐ Favorito",
         img: "assets/drinks.jpg"
+    },
+    {
+        id: 6,
+        title: "Refresco 355ml",
+        desc: "Bebida fría en lata de 355ml para acompañar tus alimentos.",
+        price: 25.00,
+        category: "bebidas",
+        img: "assets/refresco_355ml.png"
     },
     {
         id: 9,
