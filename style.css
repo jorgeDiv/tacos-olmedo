@@ -526,6 +526,31 @@ body {
 }
 .pay-contraentrega-btn i { width: 18px; height: 18px; }
 
+/* Tipo de taco */
+.pay-grid { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.pay-opt { position: relative; cursor: pointer; flex: 1 1 auto; }
+.pay-opt input { position: absolute; opacity: 0; pointer-events: none; }
+.pay-opt span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    padding: 0.6rem 0.5rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-md);
+    transition: all 0.2s ease;
+}
+.pay-opt input:checked + span {
+    color: #fff;
+    background: var(--accent);
+    border-color: var(--accent);
+    box-shadow: 0 4px 14px var(--accent-glow);
+}
+
 /* Pie fijo: total + botón */
 .cart-foot {
     flex-shrink: 0;

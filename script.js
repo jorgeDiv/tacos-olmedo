@@ -1,52 +1,28 @@
 const defaultMenu = [
     {
         id: 1,
-        title: "5 tacos surtido",
-        desc: "5 tacos de surtido con cilantro, cebolla y tu salsa favorita.",
+        title: "5 tacos",
+        desc: "5 tacos con cilantro, cebolla y tu salsa favorita.",
         price: 100.00,
         category: "tacos",
-        img: "assets/tacos.jpg"
+        img: "assets/carnitas.jpg"
     },
     {
         id: 2,
-        title: "5 tacos carnitas",
-        desc: "5 tacos de carnitas jugosas, preparadas al momento con cilantro, cebolla y salsa.",
-        price: 100.00,
+        title: "6 tacos",
+        desc: "6 tacos con cilantro, cebolla y tu salsa favorita.",
+        price: 120.00,
         category: "tacos",
+        badge: "Popular",
         img: "assets/carnitas.jpg"
     },
     {
         id: 3,
-        title: "6 tacos surtido",
-        desc: "6 tacos de surtido con cilantro, cebolla y tu salsa favorita.",
-        price: 120.00,
-        category: "tacos",
-        badge: "Popular",
-        img: "assets/tacos.jpg"
-    },
-    {
-        id: 4,
-        title: "6 tacos carnitas",
-        desc: "6 tacos de carnitas jugosas, preparadas al momento con cilantro, cebolla y salsa.",
-        price: 120.00,
-        category: "tacos",
-        img: "assets/carnitas.jpg"
-    },
-    {
-        id: 5,
-        title: "8 tacos surtido",
-        desc: "8 tacos de surtido con cilantro, cebolla y tu salsa favorita.",
+        title: "8 tacos",
+        desc: "8 tacos con cilantro, cebolla y tu salsa favorita.",
         price: 160.00,
         category: "tacos",
         badge: "Familiar",
-        img: "assets/tacos.jpg"
-    },
-    {
-        id: 6,
-        title: "8 tacos carnitas",
-        desc: "8 tacos de carnitas jugosas, preparadas al momento con cilantro, cebolla y salsa.",
-        price: 160.00,
-        category: "tacos",
         img: "assets/carnitas.jpg"
     },
     {
@@ -271,6 +247,7 @@ checkoutBtn.onclick = () => {
     const text = cart.map(i => `${i.title} (x${i.quantity})`).join('\n');
     const total = totalPriceElement.innerText;
     const payment = document.querySelector('input[name="payment"]').value;
+    const tacoType = document.querySelector('input[name="tacoType"]:checked') ? document.querySelector('input[name="tacoType"]:checked').value : 'Surtido';
     const clientName = document.getElementById('clientName').value;
     const clientPhone = document.getElementById('clientPhone').value;
     const address = document.getElementById('deliveryAddress').value;
@@ -285,8 +262,9 @@ checkoutBtn.onclick = () => {
 
     const customerMsg = `👤 *Cliente:* ${clientName}\n📞 *Teléfono:* ${clientPhone}`;
     const locMsg = address ? `📍 *Dirección de entrega:* ${address}` : "📍 *Dirección de entrega:* Sin especificar";
+    const tacoMsg = `🌮 *Tipo de taco:* ${tacoType}`;
 
-    const msg = encodeURIComponent(`¡Hola Tacos Olmedo!\n\n🛍️ *Nuevo Pedido:*\n${text}\n\n💰 *Total del carrito:* ${total}\n${payMsg}\n${customerMsg}\n${locMsg}`);
+    const msg = encodeURIComponent(`¡Hola Tacos Olmedo!\n\n🛍️ *Nuevo Pedido:*\n${text}\n\n💰 *Total del carrito:* ${total}\n${payMsg}\n${tacoMsg}\n${customerMsg}\n${locMsg}`);
 
     // Save order for Admin/Repartidor
     const orders = JSON.parse(localStorage.getItem('tacosOrders')) || [];
@@ -297,6 +275,7 @@ checkoutBtn.onclick = () => {
         customerName: clientName,
         customerPhone: clientPhone,
         paymentMethod: payment,
+        tacoType: tacoType,
         address: address,
         status: 'Pendiente',
         date: new Date().toLocaleString()
