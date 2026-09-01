@@ -258,11 +258,6 @@ catLinks.forEach(link => {
     };
 });
 
-}
-function getMpHref() {
-    return l.startsWith('http') ? l : 'https://' + l;
-}
-
 
 window.onscroll = () => {
     const btt = document.getElementById('backToTop');
@@ -286,7 +281,6 @@ checkoutBtn.onclick = () => {
         return;
     }
 
-    let payMsg = "";
     let payMsg = "💵 *Pago:* Efectivo (Contraentrega)";
 
     const customerMsg = `👤 *Cliente:* ${clientName}\n📞 *Teléfono:* ${clientPhone}`;
