@@ -26,7 +26,7 @@ const defaultMenu = [
         img: "assets/carnitas.jpg"
     },
     {
-        id: 7,
+        id: 4,
         title: "Torta de Carnitas",
         desc: "Tradicional pan telera relleno de jugosas carnitas preparadas al momento.",
         price: 60.00,
@@ -34,7 +34,7 @@ const defaultMenu = [
         img: "assets/torta_carnitas.jpg"
     },
     {
-        id: 14,
+        id: 5,
         title: "Torta de Surtido",
         desc: "Tradicional pan telera relleno de surtido con cilantro, cebolla y salsa.",
         price: 60.00,
@@ -42,7 +42,7 @@ const defaultMenu = [
         img: "assets/torta_carnitas.jpg"
     },
     {
-        id: 8,
+        id: 6,
         title: "Refresco",
         desc: "Bebida fría en lata o botella para acompañar tus alimentos.",
         price: 20.00,
@@ -50,43 +50,13 @@ const defaultMenu = [
         img: "assets/refresco.jpg"
     },
     {
-        id: 9,
+        id: 7,
         title: "Agua Fresca",
         desc: "Agua fresca de sabor natural, la mejor opción para refrescarte.",
         price: 25.00,
         category: "bebidas",
         badge: "⭐ Favorito",
         img: "assets/drinks.jpg"
-    }
-        desc: "5 tacos de surtido con tu agua fresca favorita.",
-        price: 115.00,
-        category: "combos",
-        badge: "Especial",
-        img: "assets/tacos.jpg"
-    },
-    {
-        id: 11,
-        title: "Combo: Torta + Agua Fresca",
-        desc: "Deliciosa torta de carnitas acompañada de una fresca agua de sabor.",
-        price: 70.00,
-        category: "combos",
-        img: "assets/carnitas.jpg"
-    },
-    {
-        id: 12,
-        title: "Combo: 5 Tacos + Refresco",
-        desc: "5 tacos de surtido con un refresco frío de 350 ml.",
-        price: 115.00,
-        category: "combos",
-        img: "assets/tacos.jpg"
-    },
-    {
-        id: 13,
-        title: "Combo: Torta + Refresco",
-        desc: "Deliciosa torta de carnitas acompañada de un refresco de 350 ml.",
-        price: 70.00,
-        category: "combos",
-        img: "assets/carnitas.jpg"
     }
 ];
 
