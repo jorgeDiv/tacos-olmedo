@@ -35,8 +35,8 @@ const defaultMenu = [
     },
     {
         id: 6,
-        title: "Refresco",
-        desc: "Bebida fría en lata o botella para acompañar tus alimentos.",
+        title: "Refresco 355ml",
+        desc: "Bebida fría en lata de 355ml para acompañar tus alimentos.",
         price: 20.00,
         category: "bebidas",
         img: "assets/refresco.jpg"
