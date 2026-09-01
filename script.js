@@ -159,6 +159,9 @@ function updateCartUI() {
         checkoutBtn.disabled = false;
         if (notice) notice.style.display = 'flex';
 
+        // Get kiliado size before rendering items
+        let kiliadoSize = document.querySelector('input[name="kiliadoSize"]:checked') ? document.querySelector('input[name="kiliadoSize"]:checked').value : '1kg';
+
         cart.forEach(item => {
             const el = document.createElement('div');
             el.className = 'cart-item-row';
@@ -185,7 +188,6 @@ function updateCartUI() {
     }
 
     const count = cart.reduce((acc, cur) => acc + cur.quantity, 0);
-    let kiliadoSize = document.querySelector('input[name="kiliadoSize"]:checked') ? document.querySelector('input[name="kiliadoSize"]:checked').value : '1kg';
     let total = cart.reduce((acc, cur) => {
         if (cur.category === 'kiliado') {
             return acc + (getKiliadoPrice(kiliadoSize) * cur.quantity);
