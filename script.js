@@ -280,6 +280,14 @@ cartItemsContainer.addEventListener('click', (e) => {
 cartToggle.onclick = () => { showCart(); };
 closeCart.onclick = hideCart;
 
+    // Pay toggle animation
+    const payToggle = document.getElementById('payToggle');
+    if (payToggle) {
+        payToggle.addEventListener('click', () => {
+            payToggle.classList.toggle('active');
+        });
+    }
+
 catLinks.forEach(link => {
     link.onclick = (e) => {
         catLinks.forEach(l => l.classList.remove('active'));
