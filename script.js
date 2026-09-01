@@ -1,4 +1,43 @@
 const defaultMenu = [
+
+
+
+
+
+    {
+        id: 1,
+        title: "5 tacos de carnitas",
+        desc: "5 tacos de carnitas con cilantro, cebolla y tu salsa favorita.",
+        price: 100.00,
+        category: "tacos",
+        img: "assets/carnitas.jpg"
+    },
+    {
+        id: 2,
+        title: "6 tacos de carnitas",
+        desc: "6 tacos de carnitas con cilantro, cebolla y tu salsa favorita.",
+        price: 120.00,
+        category: "tacos",
+        badge: "Popular",
+        img: "assets/carnitas.jpg"
+    },
+    {
+        id: 3,
+        title: "8 tacos de carnitas",
+        desc: "8 tacos de carnitas con cilantro, cebolla y tu salsa favorita.",
+        price: 160.00,
+        category: "tacos",
+        badge: "Familiar",
+        img: "assets/carnitas.jpg"
+    },
+    {
+        id: 4,
+        title: "Torta de Carnitas",
+        desc: "Tradicional pan Chapata casero, relleno de jugosas carnitas preparadas al momento acompañadas con sus salsas.",
+        price: 60.00,
+        category: "tortas",
+        img: "assets/torta_carnitas.jpg"
+    },
     {
         id: 8,
         title: "Lo Quiero Kiliado 500g",
@@ -40,40 +79,6 @@ const defaultMenu = [
         category: "kiliado",
         badge: "Familiar",
         img: "assets/kiliado.png"
-    },
-    {
-        id: 1,
-        title: "5 tacos de carnitas",
-        desc: "5 tacos de carnitas con cilantro, cebolla y tu salsa favorita.",
-        price: 100.00,
-        category: "tacos",
-        img: "assets/carnitas.jpg"
-    },
-    {
-        id: 2,
-        title: "6 tacos de carnitas",
-        desc: "6 tacos de carnitas con cilantro, cebolla y tu salsa favorita.",
-        price: 120.00,
-        category: "tacos",
-        badge: "Popular",
-        img: "assets/carnitas.jpg"
-    },
-    {
-        id: 3,
-        title: "8 tacos de carnitas",
-        desc: "8 tacos de carnitas con cilantro, cebolla y tu salsa favorita.",
-        price: 160.00,
-        category: "tacos",
-        badge: "Familiar",
-        img: "assets/carnitas.jpg"
-    },
-    {
-        id: 4,
-        title: "Torta de Carnitas",
-        desc: "Tradicional pan Chapata casero, relleno de jugosas carnitas preparadas al momento acompañadas con sus salsas.",
-        price: 60.00,
-        category: "tortas",
-        img: "assets/torta_carnitas.jpg"
     },
     {
         id: 7,
