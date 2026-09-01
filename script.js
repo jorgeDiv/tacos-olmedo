@@ -316,7 +316,7 @@ checkoutBtn.onclick = () => {
     const clientName = document.getElementById('clientName').value;
     const clientPhone = document.getElementById('clientPhone').value;
     const address = document.getElementById('deliveryAddress').value;
-    const adminPhone = localStorage.getItem('adminPhone') || "521234567890";
+    const adminPhone = localStorage.getItem('adminPhone') || "523211056948";
 
     if (!clientName || !clientPhone) {
         alert("Por favor ingresa tu nombre y un teléfono de contacto.");
